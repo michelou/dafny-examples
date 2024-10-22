@@ -1,0 +1,1 @@
+Source: https://www.dcc.fc.up.pt/~nam/resources/vfs20/DafnyQuickReference.pdf
