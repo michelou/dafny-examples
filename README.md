@@ -137,7 +137,7 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 [cpp_examples]: https://github.com/michelou/cpp-examples#top
 [dafny]: https://dafny.org/
 [dafny_downloads]: https://github.com/dafny-lang/dafny/releases
-[dafny_relnotes]: https://github.com/dafny-lang/dafny/releases/tag/v4.8.1
+[dafny_relnotes]: https://github.com/dafny-lang/dafny/releases/tag/v4.9.0
 [dart_examples]: https://github.com/michelou/dart-examples#top
 [deno_examples]: https://github.com/michelou/deno-examples#top
 [docker_examples]: https://github.com/michelou/docker-examples#top
