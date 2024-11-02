@@ -16,7 +16,7 @@
 
 ## <span id="proj_deps">Project dependencies</span>
 
-- [Dafny 4.8][dafny_downloads] ([*release notes*][dafny_relnotes])
+- [Dafny 4.9][dafny_downloads] ([*release notes*][dafny_relnotes])
 - [Git 2.47][git_downloads] ([*release notes*][git_relnotes])
 - [Microsoft .NET 6.0 SDK][dotnet_sdk_downloads] ([*release notes*][dotnet_sdk_relnotes])
 
@@ -24,12 +24,12 @@ Optionally one may also install the following software:
 
 - [ConEmu 2023][conemu_downloads] ([*release notes*][conemu_relnotes])
 - [Dafny for Visual Studio Code 3.4](https://github.com/dafny-lang/ide-vscode) ([*release notes*][ide-vscode_relnotes])
-- [Visual Studio Code 1.94][vscode_downloads] ([*release notes*][vscode_relnotes])
+- [Visual Studio Code 1.95][vscode_downloads] ([*release notes*][vscode_relnotes])
 
 > **&#9755;** ***Installation policy***<br/>
 > When possible we install software from a [Zip archive][zip_archive] rather than via a [Windows installer][windows_installer]. In our case we defined **`C:\opt\`** as the installation directory for optional software tools (*in reference to* the [`/opt/`][unix_opt] directory on Unix).
 
-For instance our development environment looks as follows (*October 2024*) <sup id="anchor_01">[1](#footnote_01)</sup>:
+For instance our development environment looks as follows (*November 2024*) <sup id="anchor_01">[1](#footnote_01)</sup>:
 
 <pre style="font-size:80%;">
 C:\opt\ConEmu\                        <i>( 26 MB)</i>
@@ -71,7 +71,7 @@ We execute command [**`setenv`**](setenv.bat) once to setup our development envi
 <pre style="font-size:80%;">
 <b>&gt; <a href="setenv.bat">setenv</a></b>
 Tool versions:
-   dafny 4.8.1,
+   dafny 4.8.1, code 1.95.0,
    git 2.47.0, diff 3.10, bash 5.2.37(1)
 
 <b>&gt; <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/where_1" rel="external">where</a> git sh</b>
@@ -90,7 +90,7 @@ Command [**`setenv`**](./setenv.bat)`-verbose` also prints :
 <pre style="font-size:80%;">
 <b>&gt; <a href="./setenv.bat">setenv</a> -verbose</b>
 Tool versions:
-   dafny 4.8.1,
+   dafny 4.8.1, code 1.95.0,
    git 2.47.0, diff 3.10, bash 5.2.37(1)
 Tool paths:
    C:\opt\dafny\Dafny.exe
@@ -115,16 +115,16 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 </dd>
 <dd>
 <pre style="font-size:80%;">
-<a href="https://github.com/dafny-lang/dafny/releases" rel="external">dafny-4.8.1-x64-windows-2019.zip</a>   <i>(60 MB)</i>
+<a href="https://github.com/dafny-lang/dafny/releases" rel="external">dafny-4.9.0-x64-windows-2019.zip</a>   <i>(60 MB)</i>
 <a href="https://dotnet.microsoft.com/en-us/download/dotnet/6.0" rel="external">dotnet-sdk-6.0.425-win-x64.exe</a>    <i>(194 MB)</i>
 <a href="https://git-scm.com/download/win" rel="external">PortableGit-2.47.0-64-bit.7z.exe</a>   <i>(55 MB)</i>
-<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.94.2.zip</a>       <i>(131 MB)</i>
+<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.95.0.zip</a>       <i>(131 MB)</i>
 </pre>
 </dd></dl>
 
 ***
 
-*[mics](https://lampwww.epfl.ch/~michelou/)/October 2024* [**&#9650;**](#top)  <!-- October 2023 -->
+*[mics](https://lampwww.epfl.ch/~michelou/)/November 2024* [**&#9650;**](#top)  <!-- October 2023 -->
 <span id="bottom">&nbsp;</span>
 
 <!-- link refs -->

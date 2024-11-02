@@ -424,6 +424,17 @@ if %ERRORLEVEL%==0 (
     for /f "tokens=1,* delims=+" %%i in ('"%DAFNY_HOME%\dafny.exe" --version 2^>^&1') do set "__VERSIONS_LINE1=%__VERSIONS_LINE1% dafny %%i,"
     set __WHERE_ARGS=%__WHERE_ARGS% "%DAFNY_HOME%:dafny.exe"
 )
+where /q "%VSCODE_HOME%\bin:code.cmd"
+if %ERRORLEVEL%==0 (
+    set __VSCODE_VERSION=
+    for /f "tokens=*" %%i in ('"%VSCODE_HOME%\bin\code.cmd" --version') do (
+        if not defined __VSCODE_VERSION (
+            set __VSCODE_VERSION=%%i
+            set "__VERSIONS_LINE1=%__VERSIONS_LINE1% code !__VSCODE_VERSION!,"
+        )
+    )
+    set __WHERE_ARGS=%__WHERE_ARGS% "%VSCODE_HOME%\bin:code.cmd"
+)
 where /q "%GIT_HOME%\bin:git.exe"
 if %ERRORLEVEL%==0 (
     for /f "tokens=1,2,*" %%i in ('"%GIT_HOME%\bin\git.exe" --version') do (
