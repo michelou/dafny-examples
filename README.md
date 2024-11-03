@@ -71,7 +71,7 @@ We execute command [**`setenv`**](setenv.bat) once to setup our development envi
 <pre style="font-size:80%;">
 <b>&gt; <a href="setenv.bat">setenv</a></b>
 Tool versions:
-   dafny 4.8.1, code 1.95.0,
+   dafny 4.9.0, code 1.95.0,
    git 2.47.0, diff 3.10, bash 5.2.37(1)
 
 <b>&gt; <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/where_1" rel="external">where</a> git sh</b>
@@ -90,7 +90,7 @@ Command [**`setenv`**](./setenv.bat)`-verbose` also prints :
 <pre style="font-size:80%;">
 <b>&gt; <a href="./setenv.bat">setenv</a> -verbose</b>
 Tool versions:
-   dafny 4.8.1, code 1.95.0,
+   dafny 4.9.0, code 1.95.0,
    git 2.47.0, diff 3.10, bash 5.2.37(1)
 Tool paths:
    C:\opt\dafny\Dafny.exe
