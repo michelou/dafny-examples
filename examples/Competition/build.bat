@@ -41,7 +41,7 @@ set _WARNING_LABEL=%_STRONG_FG_YELLOW%Warning%_RESET%:
 set "_SOURCE_DIR=%_ROOT_DIR%src"
 set "_TARGET_DIR=%_ROOT_DIR%target"
 
-set "_APP_NAME=Fib"
+set "_APP_NAME=Competition"
 
 if not exist "%DAFNY_HOME%\dafny.exe" (
     echo %_ERROR_LABEL% Dafny installation not found 1>&2
