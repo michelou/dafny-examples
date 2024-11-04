@@ -42,6 +42,7 @@ set "_SOURCE_DIR=%_ROOT_DIR%src"
 set "_TARGET_DIR=%_ROOT_DIR%target"
 
 set "_APP_NAME=Fib"
+set "_EXE_FILE=%_TARGET_DIR%\%_APP_NAME%.exe"
 
 if not exist "%DAFNY_HOME%\dafny.exe" (
     echo %_ERROR_LABEL% Dafny installation not found 1>&2
