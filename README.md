@@ -101,7 +101,7 @@ Tool paths:
 Environment variables:
    "DAFNY_HOME=C:\opt\dafny"
    "GIT_HOME=C:\opt\Git"
-   "JAVA_HOME=C:\opt\jdk-temurin-17.0.10_7"
+   "JAVA_HOME=C:\opt\jdk-temurin-17.0.13_11"
 Path associations:
    G:\: => %USERPROFILE%\workspace-perso\dafny-examples
 </pre>
@@ -147,7 +147,7 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 [flix_examples]: https://github.com/michelou/flix-examples#top
 [git_cli]: https://git-scm.com/docs/git
 [git_downloads]: https://git-scm.com/download/win
-[git_relnotes]: https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.46.1.txt
+[git_relnotes]: https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.47.0.txt
 [github_markdown]: https://github.github.com/gfm/
 [golang_examples]: https://github.com/michelou/golang-examples#top
 [gpcp_jvm_releases]: https://github.com/pahihu/gpcp-JVM/releases
@@ -172,6 +172,7 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 [msys2_changelog]: https://github.com/msys2/setup-msys2/blob/main/CHANGELOG.md
 [msys2_downloads]: http://repo.msys2.org/distrib/x86_64/
 [nodejs_examples]: https://github.com/michelou/nodejs-examples#top
+[oracle_openjdk17_api]: https://docs.oracle.com/en/java/javase/17/docs/api/
 [rust_examples]: https://github.com/michelou/rust-examples#top
 [scala3_examples]: https://github.com/michelou/dotty-examples#top
 [sh_cli]: https://man7.org/linux/man-pages/man1/sh.1p.html
