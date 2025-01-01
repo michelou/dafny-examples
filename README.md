@@ -12,7 +12,7 @@
   </tr>
 </table>
 
-[Ada][ada_examples], [Akka][akka_examples], [C++][cpp_examples], [COBOL][cobol_examples], [Dart][dart_examples], [Deno][deno_examples], [Docker][docker_examples], [Flix][flix_examples], [Golang][golang_examples], [GraalVM][graalvm_examples], [Haskell][haskell_examples], [Kafka][kafka_examples], [Kotlin][kotlin_examples], [LLVM][llvm_examples], [Modula-2][m2_examples], [Node.js][nodejs_examples], [Rust][rust_examples], [Scala 3][scala3_examples], [Spark][spark_examples], [Spring][spring_examples], [TruffleSqueak][trufflesqueak_examples], [WiX Toolset][wix_examples] and [Zig][zig_examples] are other topics we are continuously monitoring.
+[Ada][ada_examples], [Akka][akka_examples], [C++][cpp_examples], [COBOL][cobol_examples], [Dart][dart_examples], [Deno][deno_examples], [Docker][docker_examples], [Flix][flix_examples], [Go][golang_examples], [GraalVM][graalvm_examples], [Haskell][haskell_examples], [Kafka][kafka_examples], [Kotlin][kotlin_examples], [LLVM][llvm_examples], [Modula-2][m2_examples], [Node.js][nodejs_examples], [Rust][rust_examples], [Scala 3][scala3_examples], [Spark][spark_examples], [Spring][spring_examples], [Standard ML][sml_examples], [TruffleSqueak][trufflesqueak_examples], [WiX Toolset][wix_examples] and [Zig][zig_examples] are other topics we are continuously monitoring.
 
 ## <span id="proj_deps">Project dependencies</span>
 
@@ -25,12 +25,12 @@ Optionally one may also install the following software:
 - [ConEmu 2023][conemu_downloads] ([*release notes*][conemu_relnotes])
 - [Dafny for Visual Studio Code 3.4](https://github.com/dafny-lang/ide-vscode) ([*release notes*][ide-vscode_relnotes])
 - [Temurin OpenJDK 17 LTS][temurin_openjdk17] <sup id="anchor_02">[2](#footnote_02)</sup> ([*release notes*][temurin_openjdk17_relnotes], [*bug fixes*][temurin_openjdk17_bugfixes], [Java 17 API][oracle_openjdk17_api])
-- [Visual Studio Code 1.95][vscode_downloads] ([*release notes*][vscode_relnotes])
+- [Visual Studio Code 1.96][vscode_downloads] ([*release notes*][vscode_relnotes])
 
 > **&#9755;** ***Installation policy***<br/>
 > When possible we install software from a [Zip archive][zip_archive] rather than via a [Windows installer][windows_installer]. In our case we defined **`C:\opt\`** as the installation directory for optional software tools (*in reference to* the [`/opt/`][unix_opt] directory on Unix).
 
-For instance our development environment looks as follows (*December 2024*) <sup id="anchor_01">[1](#footnote_01)</sup>:
+For instance our development environment looks as follows (*January 2025*) <sup id="anchor_01">[1](#footnote_01)</sup>:
 
 <pre style="font-size:80%;">
 C:\opt\ConEmu\                        <i>( 26 MB)</i>
@@ -72,7 +72,7 @@ We execute command [**`setenv`**](setenv.bat) once to setup our development envi
 <pre style="font-size:80%;">
 <b>&gt; <a href="setenv.bat">setenv</a></b>
 Tool versions:
-   dafny 4.9.0, code 1.95.3,
+   dafny 4.9.1, code 1.96.2,
    git 2.47.1, diff 3.10, bash 5.2.37(1)
 
 <b>&gt; <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/where_1" rel="external">where</a> git sh</b>
@@ -91,7 +91,7 @@ Command [**`setenv`**](./setenv.bat)`-verbose` also prints :
 <pre style="font-size:80%;">
 <b>&gt; <a href="./setenv.bat">setenv</a> -verbose</b>
 Tool versions:
-   dafny 4.9.0, code 1.95.3,
+   dafny 4.9.1, code 1.96.2,
    git 2.47.1, diff 3.10, bash 5.2.37(1)
 Tool paths:
    C:\opt\dafny\Dafny.exe
@@ -116,16 +116,16 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 </dd>
 <dd>
 <pre style="font-size:80%;">
-<a href="https://github.com/dafny-lang/dafny/releases" rel="external">dafny-4.9.0-x64-windows-2019.zip</a>   <i>(60 MB)</i>
+<a href="https://github.com/dafny-lang/dafny/releases" rel="external">dafny-4.9.1-x64-windows-2019.zip</a>   <i>(60 MB)</i>
 <a href="https://dotnet.microsoft.com/en-us/download/dotnet/6.0" rel="external">dotnet-sdk-6.0.428-win-x64.exe</a>    <i>(198 MB)</i>
 <a href="https://git-scm.com/download/win" rel="external">PortableGit-2.47.1-64-bit.7z.exe</a>   <i>(55 MB)</i>
-<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.95.3.zip</a>       <i>(131 MB)</i>
+<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.96.2.zip</a>       <i>(131 MB)</i>
 </pre>
 </dd></dl>
 
 ***
 
-*[mics](https://lampwww.epfl.ch/~michelou/)/December 2024* [**&#9650;**](#top)  <!-- October 2023 -->
+*[mics](https://lampwww.epfl.ch/~michelou/)/January 2025* [**&#9650;**](#top)  <!-- October 2023 -->
 <span id="bottom">&nbsp;</span>
 
 <!-- link refs -->
@@ -138,7 +138,7 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 [cpp_examples]: https://github.com/michelou/cpp-examples#top
 [dafny]: https://dafny.org/
 [dafny_downloads]: https://github.com/dafny-lang/dafny/releases
-[dafny_relnotes]: https://github.com/dafny-lang/dafny/releases/tag/v4.9.0
+[dafny_relnotes]: https://github.com/dafny-lang/dafny/releases/tag/v4.9.1
 [dart_examples]: https://github.com/michelou/dart-examples#top
 [deno_examples]: https://github.com/michelou/deno-examples#top
 [docker_examples]: https://github.com/michelou/docker-examples#top
@@ -176,6 +176,7 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 [rust_examples]: https://github.com/michelou/rust-examples#top
 [scala3_examples]: https://github.com/michelou/dotty-examples#top
 [sh_cli]: https://man7.org/linux/man-pages/man1/sh.1p.html
+[sml_examples]: https://github.com/michelou/sml-examples#top
 [spark_examples]: https://github.com/michelou/spark-examples#top
 [spring_examples]: https://github.com/michelou/spring-examples#top
 <!--

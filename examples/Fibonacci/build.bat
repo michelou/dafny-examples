@@ -181,14 +181,18 @@ if %_VERBOSE%==1 (
 echo Usage: %__BEG_O%%_BASENAME% { ^<option^> ^| ^<subcommand^> }%__END%
 echo.
 echo   %__BEG_P%Options:%__END%
-echo     %__BEG_O%-debug%__END%      print commands executed by this script
-echo     %__BEG_O%-verbose%__END%    print progress messages
+echo     %__BEG_O%-debug%__END%          print commands executed by this script
+echo     %__BEG_O%-target:^<name^>%__END%  select target language ^(default: %_BEG_O%native%__END%^)
+echo     %__BEG_O%-verbose%__END%        print progress messages
 echo.
 echo   %__BEG_P%Subcommands:%__END%
-echo     %__BEG_O%clean%__END%       delete generated files
-echo     %__BEG_O%compile%__END%     compile Dafny source files
-echo     %__BEG_O%help%__END%        print this help message
-echo     %__BEG_O%run%__END%         execute main program "%__BEG_N%!_TARGET_FILE:%_ROOT_DIR%=!%__END%"
+echo     %__BEG_O%clean%__END%           delete generated files
+echo     %__BEG_O%compile%__END%         compile Dafny source files
+echo     %__BEG_O%help%__END%            print this help message
+echo     %__BEG_O%run%__END%             execute main program "%__BEG_N%!_TARGET_FILE:%_ROOT_DIR%=!%__END%"
+echo.
+echo   %__BEG_P%Target names:%__END%
+echo     %__BEG_O%native%__END% ^(default^), %__BEG_O%go%__END%, %__BEG_O%java%__END%, %__BEG_O%rs%__END%
 goto :eof
 
 @rem #########################################################################
@@ -265,7 +269,7 @@ if %_TARGET%==java (
     set __EXECUTOR=
     set __EXECUTOR_OPTS=
 )
-if %_DEBUG%==1 ( echo %_DEBUG_LABEL% !__EXECUTOR:%JAVA_HOME%=%%JAVA_HOME%%! %__EXECUTOR_OPTS% "%_TARGET_FILE%" 1>&2
+if %_DEBUG%==1 ( echo %_DEBUG_LABEL% %__EXECUTOR% %__EXECUTOR_OPTS% "%_TARGET_FILE%" 1>&2
 ) else if %_VERBOSE%==1 ( echo Execute Dafny program "!_TARGET_FILE:%_ROOT_DIR%=!" 1>&2
 )
 call %__EXECUTOR% %__EXECUTOR_OPTS% "%_TARGET_FILE%"

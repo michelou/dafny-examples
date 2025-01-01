@@ -265,7 +265,7 @@ if %_TARGET%==java (
     set __EXECUTOR=
     set __EXECUTOR_OPTS=
 )
-if %_DEBUG%==1 ( echo %_DEBUG_LABEL% !__EXECUTOR:%JAVA_HOME%=%%JAVA_HOME%%! %__EXECUTOR_OPTS% "%_TARGET_FILE%" 1>&2
+if %_DEBUG%==1 ( echo %_DEBUG_LABEL% %__EXECUTOR% %__EXECUTOR_OPTS% "%_TARGET_FILE%" 1>&2
 ) else if %_VERBOSE%==1 ( echo Execute Dafny program "!_TARGET_FILE:%_ROOT_DIR%=!" 1>&2
 )
 call %__EXECUTOR% %__EXECUTOR_OPTS% "%_TARGET_FILE%"
