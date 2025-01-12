@@ -52,13 +52,13 @@ args() {
     for arg in "$@"; do
         case "$arg" in
         ## options
-        -debug)        DEBUG=1 ;;
-        -help)         HELP=1 ;;
-        -target:go     TARGET=native ;;
-        -target:java   TARGET=java ;;
-        -target:native TARGET=native ;;
-        -target:rs     TARGET=rs ;;
-        -verbose)      VERBOSE=1 ;;
+        -debug)         DEBUG=1 ;;
+        -help)          HELP=1 ;;
+        -target:go)     TARGET=native ;;
+        -target:java)   TARGET=java ;;
+        -target:native) TARGET=native ;;
+        -target:rs)     TARGET=rs ;;
+        -verbose)       VERBOSE=1 ;;
         -*)
             error "Unknown option \"$arg\""
             EXITCODE=1 && return 0
@@ -74,7 +74,7 @@ args() {
             ;;
         esac
     done
-    debug "Options    : TIMER=$TIMER VERBOSE=$VERBOSE"
+    debug "Options    : TARGET=$TARGET TIMER=$TIMER VERBOSE=$VERBOSE"
     debug "Subcommands: CLEAN=$CLEAN COMPILE=$COMPILE DOC=$DOC HELP=$HELP LINT=$LINT RUN=$RUN"
     debug "Variables  : DAFNY_HOME=$DAFNY_HOME"
     debug "Variables  : GIT_HOME=$GIT_HOME"
