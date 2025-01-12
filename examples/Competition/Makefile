@@ -1,5 +1,5 @@
 ##
-## Copyright (c) 2018-2024 Stéphane Micheloud
+## Copyright (c) 2018-2025 Stéphane Micheloud
 ##
 ## Licensed under the MIT License.
 ##
@@ -57,7 +57,7 @@ help:
 	@$(ECHO) ""
 	@$(ECHO) "  Subcommands:"
 	@$(ECHO) "    all    alias for build"
-	@$(ECHO) "    build  compile Java/Scala source files"
+	@$(ECHO) "    build  compile Dafny source files"
 	@$(ECHO) "    clean  delete generated files"
 	@$(ECHO) "    doc    generate HTML documentation"
 	@$(ECHO) "    help   print this help message"

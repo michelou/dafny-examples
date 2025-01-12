@@ -13,14 +13,14 @@
 This example has the following directory structure :
 
 <pre style="font-size:80%;">
-<b>&gt; <a hfef="">tree</a> /f /a . | <a href="">findstr</a> /v /b [A-Z]</b>
+<b>&gt; <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tree" rel="external">tree</a> /f /a . | <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr" rel="external">findstr</a> /v /b [A-Z]</b>
 |   <a href="./Fibonacci/build.bat">build.bat</a>
 |   <a href="./Fibonacci/build.sh">build.sh</a>
 \---<b>src</b>
         <a href="./Fibonacci/src/Fib.dfy">Fib.dfy</a>
 </pre>
 
-Command [**`build.bat`**](./Fibonacci/build.bat)`-verbose clean run` <sup id="anchor_01">[1](#footnote_01)</sup> generates and executes the [Dafny] program `target\Fib.exe` :
+Command [**`build.bat`**](./Fibonacci/build.bat)`-verbose clean run` generates and executes the [Dafny] program `target\Fib.exe` :
 
 <pre style="font-size:80%;">
 <b>&gt; <a href="./Fibonacci/build.bat">build</a> -verbose clean run</b>
@@ -32,33 +32,86 @@ Execute Dafny program "target\Fib.exe"
 fib(10)=55
 </pre>
 
-> **Note**: The Dafny command can generate several targets besides the native executable presented above. Command option `--target <name>` 
+> **Note**: The Dafny command can generate several targets besides the native executable presented above. We simply specify the command option `--target <name>` :
+>
 > |  Name  | Target&nbsp;language | `PATH`&nbsp;at build time |
 > |:-------|:-----------|:------------|
-> | `cs`   | C#         | |
-> | `js`   | JavaScript | |
-> | `go`   | Go         | + `%GOROOT%\bin;%GOBIN%` <sup id="anchor_02">[2](#footnote_02)</sup> |
-> | `java` | Java       | + `%JAVA_HOME%\bin` |
-> | `py`   | Python     | |
-> | `cpp`  | C++        | |
-> | `lib`  | Dafny Library (.doo) | |
-> | `rs`   | Rust    | |
-> | `dfy`  | ResolvedDesugaredExecutableDafny | |
->
-> For instance, we generate the file `target\Fib.jar` when targetting Java :
+> | `cs`   | [C#][target_csharp] | |
+> | `js`   | [JavaScript][target_javascript] | |
+> | `go`   | [Go][target_golang] | + `%GOROOT%\bin;%GOBIN%` <sup id="anchor_02">[2](#footnote_02)</sup> |
+> | `java` | [Java][target_java] | + `%JAVA_HOME%\bin` |
+> | `py`   | [Python][target_python] | |
+> | `cpp`  | [C++][target_cpp] | |
+> | `lib`  | [Dafny][target_dafny] Library (.doo) | |
+> | `rs`   | [Rust][target_rust] | |
+> | `dfy`  | [ResolvedDesugaredExecutableDafny][target_desugared] | |
+
+Command [`build.bat`](./Fibonacci/build.bat) with option `-target:java` compiles and generates the file `target\Fib.jar` :
+
+<pre style="font-size:80%;">
+<b>&gt; <a href="./Fibonacci/build.bat">build</a> -debug -target:java clean run</b>
+[build] Options    : _TARGET=java _VERBOSE=0
+[build] Subcommands:  clean compile run
+[build] Variables  : "DAFNY_HOME=C:\opt\dafny"
+[build] Variables  : "GIT_HOME=C:\opt\Git"
+[build] Variables  : "JAVA_HOME=C:\opt\jdk-temurin-17.0.13_11"
+[build] rmdir /s /q "F:\examples\Fibonacci\target"
+[build] "%DAFNY_HOME%\dafny.exe" build --target java --output  "F:\examples\Fibonacci\target\Fib.jar"  "F:\examples\Fibonacci\src\Fib.dfy"
+Dafny program verifier finished with 3 verified, 0 errors
+[build] "%JAVA_HOME%\bin\java.exe" -jar "F:\examples\Fibonacci\target\Fib.jar"
+fib(10)=55
+[build] _EXITCODE=0
+</pre>
+
+Command [`build.bat`](./Fibonacci/build.bat) with option `-target:go` <sup id="anchor_01">[1](#footnote_01)</sup> compiles and generates the file `target\Fib.exe` :
+
+<pre style="font-size:80%;">
+<b>&gt; <a href="./Fibonacci/build.bat">build</a> -verbose -target:go clean run</b>
+Build Dafny program "target\Fib.exe" with "go" target
+
+Dafny program verifier finished with 3 verified, 0 errors
+Execute Dafny program "target\Fib.exe"
+fib(10)=55
+</pre>
+
+> **:mag_right:** Let's compare the binary files generated with target options `native`, `go` and `rs` :
 > <pre style="font-size:80%;">
-> &gt; <a href="./Fibonacci/build.bat">build</a> -debug -target:java clean run</b>
-> [build] Options    : _TARGET=java _VERBOSE=0
-> [build] Subcommands:  clean compile run
-> [build] Variables  : "DAFNY_HOME=C:\opt\dafny"
-> [build] Variables  : "GIT_HOME=C:\opt\Git"
-> [build] Variables  : "JAVA_HOME=C:\opt\jdk-temurin-17.0.10_7"
-> [build] rmdir /s /q "F:\examples\Fibonacci\target"
-> [build] "%DAFNY_HOME%\dafny.exe" build --target java --output  "F:\examples\Fibonacci\target\Fib.jar"  "F:\examples\Fibonacci\src\Fib.dfy"
-> Dafny program verifier finished with 3 verified, 0 errors
-> [build] "%JAVA_HOME%\bin\java.exe" -jar "F:\examples\Fibonacci\target\Fib.jar"
-> fib(10)=55
-> [build] _EXITCODE=0
+> <b>&gt; <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dir" rel="external">dir</a> *.exe| <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr" rel="external">findstr</a> /e .exe</b>
+> 01/11/2025  08:45 PM         2,553,856 Fib_go.exe
+> 01/11/2025  08:45 PM           151,040 Fib_native.exe
+> 01/12/2025  01:10 AM           359,936 Fib_rust.exe
+> </pre>
+> Go
+> <pre style="font-size:80%;">
+> <b>&gt; <a href="">pelook.exe</a> Fib_go.exe | <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr" rel="external">findstr</a> /c:signature /c:linkver /c:toolset /c:modules:</b>
+> signature/type:       PE64 EXE image for amd64
+> linkver:              3.0
+> import modules:       kernel32.dll
+> delay-import modules: &lt;none>
+> </pre>
+> Native
+> <pre style="font-size:80%;">
+> <b>&gt; <a href="">pelook.exe</a> Fib_native.exe | <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr" rel="external">findstr</a> /c:signature /c:linkver /c:toolset /c:modules:</b>
+> signature/type:       PE64 EXE image for amd64
+> linkver:              Microsoft LINK 14.29
+> detected toolset(s):  Visual C++ 9.0 2008 SP1 (build 30729) <--COMPILER(s)
+> import modules:       KERNEL32.dll, USER32.dll, SHELL32.dll, ADVAPI32.dll,
+>                       api-ms-win-crt-runtime-l1-1-0.dll,
+>                       [...]
+>                       api-ms-win-crt-time-l1-1-0.dll
+> delay-import modules: &lt;none>
+> </pre>
+> Rust
+> <pre style="font-size:80%;">
+> <b>&gt; <a href="">pelook.exe</a> Fib_rust.exe | <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr" rel="external">findstr</a> /c:signature /c:linkver /c:toolset /c:modules:</b>
+> signature/type:       PE64 EXE image for amd64
+> linkver:              Microsoft LINK 14.41
+> detected toolset(s):  Visual C++ 9.0 2008 SP1 (build 30729) <--COMPILER(s)
+> import modules:       api-ms-win-core-synch-l1-2-0.dll, KERNEL32.dll,
+>                       ntdll.dll, VCRUNTIME140.dll, api-ms-win-crt-math-l1-1-0.dll,
+>                       [...]
+>                       api-ms-win-crt-heap-l1-1-0.dll
+> delay-import modules: &lt;none>
 > </pre>
 
 <!--================================================================-->
@@ -67,7 +120,7 @@ fib(10)=55
 This example has the following directory structure :
 
 <pre style="font-size:80%;">
-<b>&gt; <a href="">tree</a> /f /a . | <a href="">findstr</a> /v /b [A-Z]</b>
+<b>&gt; <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tree" rel="external">tree</a> /f /a . | <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr" rel="external">findstr</a> /v /b [A-Z]</b>
 |   <a href="./GettingStarted/00download.txt">00download.txt</a>
 |   <a href="./GettingStarted/build.bat">build.bat</a>
 |   <a href="./GettingStarted/build.sh">build.sh</a>
@@ -91,41 +144,34 @@ GettingStarted: Abs(-3)=3
 
 ## <span id="footnotes">Footnotes</span> [**&#x25B4;**](#top)
 
-<span id="footnote_01">[1]</span> ***Missing .NET Framework 6*** [↩](#anchor_01)
+<span id="footnote_01">[1]</span> ***Missing* <code>goimports</code> *command*** [↩](#anchor_01)
 
 <dl><dd>
 <pre style="font-size:80%;">
-<b>&gt; c:\opt\dafny\Dafny.exe run src\Fib.dfy</b>
-&nbsp;
-Dafny program verifier finished with 3 verified, 0 errors
-It was not possible to find any compatible framework version
-The framework '<span style="color:darkred;">Microsoft.NETCore.App</span>', version '<span style="color:darkred;">6.0.0</span>' was not found.
-  - The following frameworks were found:
-      2.1.12 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
-      2.1.13 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
-      2.1.26 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
-      2.1.30 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
-      3.1.32 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
-      5.0.17 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
-&nbsp;
-You can resolve the problem by installing the specified framework and/or SDK.
-&nbsp;
-The specified framework can be found at:
-  - https://aka.ms/dotnet-core-applaunch?framework=Microsoft.NETCore.App&framework_version=6.0.0&arch=x64&rid=win10-x64
+<b>&gt; %GOROOT%\bin\<a href="https://pkg.go.dev/cmd/go" rel="external">go</a> install golang.org/x/tools/cmd/goimports@latest</b>
+go: downloading golang.org/x/tools v0.29.0
+go: downloading golang.org/x/mod v0.22.0
+go: downloading golang.org/x/sync v0.10.0
 </pre>
-</dd></dl>
 
-<span id="footnote_02">[2]</span> ***Missing* <code>goimports</code> *command*** [↩](#anchor_02)
-
-<dl><dd>
 <pre style="font-size:80%;">
-<b>&gt; where go</b>
-C:\opt\go\bin\go.exe
-&nbsp;
-<b>&gt; go install golang.org/x/tools/cmd/goimports@latest</b>
-go: downloading golang.org/x/tools v0.26.0
-go: downloading golang.org/x/mod v0.21.0
-go: downloading golang.org/x/sync v0.8.0
+<b>&gt; %GOROOT%\bin\go.exe version -m %GOBIN%\goimports.exe</b>
+%GOBIN%\goimports.exe: go1.23.4
+        path    golang.org/x/tools/cmd/goimports
+        mod     golang.org/x/tools      v0.29.0 h1:Xx0h3TtM...JdhdzXE=
+        dep     golang.org/x/mod        v0.22.0 h1:D4nJWe9z...59z1pH4=
+        dep     golang.org/x/sync       v0.10.0 h1:3NQrjDix...Ta98gmQ=
+        build   -buildmode=exe
+        build   -compiler=gc
+        build   DefaultGODEBUG=asynctimerchan=1,gotypesalias=1,[...]
+        build   CGO_ENABLED=1
+        build   CGO_CFLAGS=
+        build   CGO_CPPFLAGS=
+        build   CGO_CXXFLAGS=
+        build   CGO_LDFLAGS=
+        build   GOARCH=amd64
+        build   GOOS=windows
+        build   GOAMD64=v1
 </pre>
 </dd></dl>
 
@@ -137,3 +183,12 @@ go: downloading golang.org/x/sync v0.8.0
 <!-- link refs -->
 
 [dafny]: https://dafny.org/
+[target_cpp]: https://github.com/dafny-lang/dafny/tree/master/Source/DafnyCore/Backends/Cplusplus
+[target_csharp]: https://github.com/dafny-lang/dafny/tree/master/Source/DafnyCore/Backends/CSharp
+[target_dafny]: https://github.com/dafny-lang/dafny/tree/master/Source/DafnyCore/Backends/Dafny
+[target_desugared]: https://github.com/dafny-lang/dafny/tree/master/Source/DafnyCore/Backends/ResolvedDesugaredExecutableDafny
+[target_golang]: https://github.com/dafny-lang/dafny/tree/master/Source/DafnyCore/Backends/GoLang
+[target_java]: https://github.com/dafny-lang/dafny/tree/master/Source/DafnyCore/Backends/Java
+[target_javascript]: https://github.com/dafny-lang/dafny/tree/master/Source/DafnyCore/Backends/JavaScript
+[target_python]: https://github.com/dafny-lang/dafny/tree/master/Source/DafnyCore/Backends/Python
+[target_rust]: https://github.com/dafny-lang/dafny/tree/master/Source/DafnyCore/Backends/Rust

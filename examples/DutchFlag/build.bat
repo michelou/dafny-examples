@@ -32,9 +32,6 @@ goto end
 :env
 set _BASENAME=%~n0
 set "_ROOT_DIR=%~dp0"
-set _TIMER=0
-
-set "_APP_NAME=DutchFlag"
 
 call :env_colors
 set _DEBUG_LABEL=%_NORMAL_BG_CYAN%[%_BASENAME%]%_RESET%
@@ -44,12 +41,20 @@ set _WARNING_LABEL=%_STRONG_FG_YELLOW%Warning%_RESET%:
 set "_SOURCE_DIR=%_ROOT_DIR%src"
 set "_TARGET_DIR=%_ROOT_DIR%target"
 
+set "_APP_NAME=DutchFlag"
+set "_EXE_FILE=%_TARGET_DIR%\%_APP_NAME%.exe"
+
 if not exist "%DAFNY_HOME%\dafny.exe" (
     echo %_ERROR_LABEL% Dafny installation not found 1>&2
     set _EXITCODE=1
     goto :eof
 )
 set "_DAFNY_CMD=%DAFNY_HOME%\dafny.exe"
+
+set _JAVA_CMD=
+if exist "%JAVA_HOME%\bin\java.exe" (
+    set "_JAVA_CMD=%JAVA_HOME%\bin\java.exe"
+)
 goto :eof
 
 :env_colors
@@ -103,6 +108,10 @@ goto :eof
 @rem input parameter: %*
 :args
 set _COMMANDS=
+@rem option --target takes one of 'cs' (C#), 'js' (JavaScript), 'go' (Go),
+@rem 'java' (Java), 'py' (Python), 'cpp' (C++), 'lib' (Dafny Library (.doo)),
+@rem 'rs' (Rust), 'dfy' (ResolvedDesugaredExecutableDafny)
+set _TARGET=native
 set _VERBOSE=0
 set __N=0
 :args_loop
@@ -114,7 +123,10 @@ if not defined __ARG (
 if "%__ARG:~0,1%"=="-" (
     @rem option
     if "%__ARG%"=="-debug" ( set _DEBUG=1
-    ) else if "%__ARG%"=="-timer" ( set _TIMER=1
+    ) else if "%__ARG%"=="-target:go" ( set _TARGET=go
+    ) else if "%__ARG%"=="-target:java" ( set _TARGET=java
+    ) else if "%__ARG%"=="-target:native" ( set _TARGET=native
+    ) else if "%__ARG%"=="-target:rs" ( set _TARGET=rs
     ) else if "%__ARG%"=="-verbose" ( set _VERBOSE=1
     ) else (
         echo %_ERROR_LABEL% Unknown option "%__ARG%" 1>&2
@@ -140,11 +152,29 @@ goto args_loop
 set _STDERR_REDIRECT=2^>NUL
 if %_DEBUG%==1 set _STDERR_REDIRECT=
 
+if %_TARGET%==java if not defined _JAVA_CMD (
+    echo %_WARNING_LABEL% Java installation directory not found 1>&2
+    set _TARGET=native
+)
+if %_TARGET%==native ( set __TARGET_EXT=.exe
+) else if %_TARGET%==go ( set __TARGET_EXT=.exe
+) else if %_TARGET%==java ( set __TARGET_EXT=.jar
+) else if %_TARGET%==rs ( set __TARGET_EXT=.exe
+) else (
+    echo %_ERROR_LABEL% Unknown target "%_TARGET%" 1>&2
+    set _EXITCODE=1
+    goto :eof
+)
+set "_TARGET_FILE=%_TARGET_DIR%\%_APP_NAME%%__TARGET_EXT%"
+set "_TARGET_BUILD_FILE=%_TARGET_DIR%\target-build.txt"
+
 if %_DEBUG%==1 (
-    echo %_DEBUG_LABEL% Options    : _VERBOSE=%_VERBOSE% 1>&2
+    echo %_DEBUG_LABEL% Options    : _TARGET=%_TARGET% _VERBOSE=%_VERBOSE% 1>&2
     echo %_DEBUG_LABEL% Subcommands: %_COMMANDS% 1>&2
     echo %_DEBUG_LABEL% Variables  : "DAFNY_HOME=%DAFNY_HOME%" 1>&2
     echo %_DEBUG_LABEL% Variables  : "GIT_HOME=%GIT_HOME%" 1>&2
+    if defined GOROOT echo %_DEBUG_LABEL% Variables  : "GOROOT=%GOROOT%" 1>&2
+    echo %_DEBUG_LABEL% Variables  : "JAVA_HOME=%JAVA_HOME%" 1>&2
 )
 goto :eof
 
@@ -163,14 +193,18 @@ if %_VERBOSE%==1 (
 echo Usage: %__BEG_O%%_BASENAME% { ^<option^> ^| ^<subcommand^> }%__END%
 echo.
 echo   %__BEG_P%Options:%__END%
-echo     %__BEG_O%-debug%__END%      print commands executed by this script
-echo     %__BEG_O%-verbose%__END%    print progress messages
+echo     %__BEG_O%-debug%__END%          print commands executed by this script
+echo     %__BEG_O%-target:^<name^>%__END%  select target language ^(default: %_BEG_O%native%__END%^)
+echo     %__BEG_O%-verbose%__END%        print progress messages
 echo.
 echo   %__BEG_P%Subcommands:%__END%
-echo     %__BEG_O%clean%__END%       delete generated files
-echo     %__BEG_O%compile%__END%     compile Dafny source files
-echo     %__BEG_O%help%__END%        print this help message
-echo     %__BEG_O%run%__END%         execute program "%__BEG_N%%_APP_NAME%%__END%"
+echo     %__BEG_O%clean%__END%           delete generated files
+echo     %__BEG_O%compile%__END%         compile Dafny source files
+echo     %__BEG_O%help%__END%            print this help message
+echo     %__BEG_O%run%__END%             execute main program "%__BEG_N%!_TARGET_FILE:%_ROOT_DIR%=!%__END%"
+echo.
+echo   %__BEG_P%Target names:%__END%
+echo     %__BEG_O%native%__END% ^(default^), %__BEG_O%go%__END%, %__BEG_O%java%__END%, %__BEG_O%rs%__END%
 goto :eof
 
 @rem #########################################################################
@@ -198,23 +232,85 @@ goto :eof
 :compile
 if not exist "%_TARGET_DIR%" mkdir "%_TARGET_DIR%"
 
-set __BUILD_OPTS=--output "%_TARGET_DIR%\%_APP_NAME%.exe"
-
-if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "%_DAFNY_CMD%" build %__BUILD_OPTS% "%_SOURCE_DIR%\%_APP_NAME%.dfy" 1>&2
-) else if %_VERBOSE%==1 ( echo Build Dafny program "%_APP_NAME%" 1>&2
+set __SOURCE_FILES=
+set __N=0
+for /f "delims=" %%f in ('dir /b /s "%_SOURCE_DIR%\*.dfy" 2^>NUL') do (
+    set __SOURCE_FILES=!__SOURCE_FILES! "%%f"
+    set /a __N+=1
 )
-"%_DAFNY_CMD%" build %__BUILD_OPTS% "%_SOURCE_DIR%\%_APP_NAME%.dfy"
+if %__N%==0 (
+    echo %_WARNING_LABEL% No Dafny source file found 1>&2
+    goto :eof
+) else if %__N%==1 ( set __N_FILES=%__N% Dafny source file
+) else ( set __N_FILES=%__N% Dafny source files
+)
+
+set __BUILD_OPTS=--output "%_TARGET_FILE%"
+if not %_TARGET%==native set __BUILD_OPTS=--target %_TARGET% %__BUILD_OPTS%
+
+set "__PATH=%PATH%"
+if %_TARGET%==go ( set "PATH=%__PATH%;%GOROOT%\bin;%GOBIN%"
+) else if %_TARGET%==java set "PATH=%__PATH%;%JAVA_HOME%\bin"
+) else if %_TARGET%==rs ( set "PATH=%__PATH%;%CARGO_HOME%\bin"
+)
+if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "!_DAFNY_CMD:%DAFNY_HOME%=%%DAFNY_HOME%%!" build %__BUILD_OPTS% %__SOURCE_FILES% 1>&2
+) else if %_VERBOSE%==1 ( echo Build Dafny program "!_TARGET_FILE:%_ROOT_DIR%=!" with "%_TARGET%" target 1>&2
+)
+call "%_DAFNY_CMD%" build %__BUILD_OPTS% %__SOURCE_FILES%
+if not %ERRORLEVEL%==0 (
+    if not %_TARGET%==native set "PATH=%__PATH%"
+    echo %_ERROR_LABEL% Failed to build Dafny program "!_TARGET_FILE:%_ROOT_DIR%=!" with "%_TARGET%" target 1>&2
+    set _EXITCODE=1
+    goto :eof
+)
+if not %_TARGET%==native set "PATH=%__PATH%"
+@rem we keep track of the choosen target to retrieve the executable path
+echo %_TARGET% > "%_TARGET_BUILD_FILE%"
 goto :eof
 
 :run
-if not exist "%_TARGET_DIR%" mkdir "%_TARGET_DIR%"
-
-set __RUN_OPTS=
-
-if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "%_DAFNY_CMD%" run %__RUN_OPTS% "%_SOURCE_DIR%\DutchFlag.dfy" 1>&2
-) else if %_VERBOSE%==1 ( echo Execute Dafny program "%_APP_NAME%" 1>&2
+if exist "%_TARGET_BUILD_FILE%" (
+    set /p __TARGET_BUILD=<"%_TARGET_BUILD_FILE%"
+) else (
+    echo %_WARNING_LABEL% Assume 'native' target 1>&2
+    set __TARGET_BUILD=native
 )
-"%_DAFNY_CMD%" run %__RUN_OPTS% "%_SOURCE_DIR%\%_APP_NAME%.dfy"
+if %__TARGET_BUILD%==java (
+    call :run_java
+    goto :eof
+)
+if %__TARGET_BUILD%==rs ( set "__TARGET_DIR=%_TARGET_DIR%\%_APP_NAME%-rust\target\debug"
+) else ( set "__TARGET_DIR=%_TARGET_DIR%"
+)
+set "__TARGET_FILE=%__TARGET_DIR%\%_APP_NAME%.exe"
+if not exist "%__TARGET_FILE%" (
+    echo %_ERROR_LABEL% Dafny program "!__TARGET_FILE:%_ROOT_DIR%=!" not found 1>&2
+    set _EXITCODE=1
+    goto :eof
+)
+if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "%__TARGET_FILE%" 1>&2
+) else if %_VERBOSE%==1 ( echo Execute Dafny program "!__TARGET_FILE:%_ROOT_DIR%=!" 1>&2
+)
+call "%__TARGET_FILE%"
+if not %ERRORLEVEL%==0 (
+    echo %_ERROR_LABEL% Failed to execute Dafny program "!__TARGET_FILE:%_ROOT_DIR%=!" 1>&2
+    set _EXITCODE=1
+    goto :eof
+)
+goto :eof
+
+:run_java
+set "__JAR_FILE=%_TARGET_FILE%"
+
+if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "%_JAVA_CMD%" -jar "%__JAR_FILE%" 1>&2
+) else if %_VERBOSE%==1 ( echo Execute Dafny program "!__JAR_FILE:%_ROOT_DIR%=!" 1>&2
+)
+call "%_JAVA_CMD%" -jar "%__JAR_FILE%"
+if not %ERRORLEVEL%==0 (
+    echo %_ERROR_LABEL% Failed to execute Dafny program "!__JAR_FILE:%_ROOT_DIR%=!" 1>&2
+    set _EXITCODE=1
+    goto :eof
+)
 goto :eof
 
 :end

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2018-2024 Stéphane Micheloud
+# Copyright (c) 2018-2025 Stéphane Micheloud
 #
 # Licensed under the MIT License.
 #
@@ -52,9 +52,13 @@ args() {
     for arg in "$@"; do
         case "$arg" in
         ## options
-        -debug)    DEBUG=1 ;;
-        -help)     HELP=1 ;;
-        -verbose)  VERBOSE=1 ;;
+        -debug)         DEBUG=1 ;;
+        -help)          HELP=1 ;;
+        -target:go)     TARGET=native ;;
+        -target:java)   TARGET=java ;;
+        -target:native) TARGET=native ;;
+        -target:rs)     TARGET=rs ;;
+        -verbose)       VERBOSE=1 ;;
         -*)
             error "Unknown option \"$arg\""
             EXITCODE=1 && return 0
@@ -70,10 +74,11 @@ args() {
             ;;
         esac
     done
-    debug "Options    : TIMER=$TIMER VERBOSE=$VERBOSE"
+    debug "Options    : TARGET=$TARGET TIMER=$TIMER VERBOSE=$VERBOSE"
     debug "Subcommands: CLEAN=$CLEAN COMPILE=$COMPILE DOC=$DOC HELP=$HELP LINT=$LINT RUN=$RUN"
     debug "Variables  : DAFNY_HOME=$DAFNY_HOME"
     debug "Variables  : GIT_HOME=$GIT_HOME"
+    debug "Variables  : JAVA_HOME=$JAVA_HOME"
     # See http://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/
     [[ $TIMER -eq 1 ]] && TIMER_START=$(date +"%s")
 }
@@ -83,14 +88,18 @@ help() {
 Usage: $BASENAME { <option> | <subcommand> }
 
   Options:
-    -debug       print commands executed by this script
-    -verbose     print progress messages
+    -debug          print commands executed by this script
+    -target:<name>  select target language (default: native)
+    -verbose        print progress messages
 
   Subcommands:
-    clean        delete generated files
-    compile      compile Dafny source files
-    help         print this help message
-    run          execute the generated program "${TARGET_FILE/$ROOT_DIR\//}"
+    clean           delete generated files
+    compile         compile Dafny source files
+    help            print this help message
+    run             execute the generated program "${TARGET_FILE/$ROOT_DIR\//}"
+
+  Target names:
+    native (default), go, java, rs
 EOS
 }
 
@@ -124,18 +133,28 @@ compile() {
     fi
     local s=; [[ $n -gt 1 ]] && s="s"
     local n_files="$n Dafny source file$s"
-    local dafny_opts="--output \"$TARGET_FILE\""
-    [[ $DEBUG -eq 1 ]] && dafny_opts="--verbose $dafny_opts"
+    local build_opts="--output \"$TARGET_FILE\""
+    [[ "$TARGET" -eq native ]] || build_opts=--target $TARGET $build_opts
+
+    local path="$PATH"
+    case "$TARGET" in
+        go)   export PATH="$GOROOT/bin:$GOBIN:$PATH" ;;
+        java) export PATH="$JAVA_HOME/bin:$PATH" ;;
+        rs)   export PATH="$CARGO_HOME/bin:$PATH" ;;
+        *)
+    esac
     if [[ $DEBUG -eq 1 ]]; then
-        debug "$DAFNY_CMD build $dafny_opts $source_files"
+        debug "$DAFNY_CMD build $build_opts $source_files"
     elif [[ $VERBOSE -eq 1 ]]; then
-        echo "Compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\"" 1>&2
+        echo "Compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\" with \"$TARGET\" target" 1>&2
     fi
-    eval "\"$DAFNY_CMD\" build $dafny_opts $source_files"
+    eval "\"$DAFNY_CMD\" build $build_opts $source_files"
     if [[ $? -ne 0 ]]; then
-        error "Failed to compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\""
+        export PATH="$path"
+        error "Failed to compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\" with \"$TARGET\" target"
         cleanup 1
-    fi  
+    fi
+    export PATH="$path"
 }
 
 action_required() {
@@ -210,6 +229,7 @@ COMPILE=0
 DEBUG=0
 HELP=0
 RUN=0
+TARGET=native
 TIMER=0
 VERBOSE=0
 
@@ -220,11 +240,13 @@ cygwin=0
 mingw=0
 msys=0
 darwin=0
+linux=0
 case "$(uname -s)" in
     CYGWIN*) cygwin=1 ;;
     MINGW*)  mingw=1 ;;
     MSYS*)   msys=1 ;;
-    Darwin*) darwin=1
+    Darwin*) darwin=1 ;;
+    Linux*)  linux=1
 esac
 unset CYGPATH_CMD
 PSEP=":"
@@ -233,6 +255,7 @@ if [[ $(($cygwin + $mingw + $msys)) -gt 0 ]]; then
     PSEP=";"
     [[ -n "$DAFNY_HOME" ]] && DAFNY_HOME="$(mixed_path $DAFNY_HOME)"
     [[ -n "$GIT_HOME" ]] && GIT_HOME="$(mixed_path $GIT_HOME)"
+    [[ -n "$JAVA_HOME" ]] && JAVA_HOME="$(mixed_path $JAVA_HOME)"
     DIFF_CMD="$GIT_HOME/usr/bin/diff.exe"
 else
     DIFF_CMD="$(which diff)"
@@ -249,10 +272,17 @@ PROJECT_VERSION="1.0-SNAPSHOT"
 
 APP_NAME="Fibonacci"
 
-TARGET_FILE="$TARGET_DIR/$APP_NAME.exe"
-
 args "$@"
 [[ $EXITCODE -eq 0 ]] || cleanup 1
+
+case "$TARGET" in
+    native) TARGET_EXT=.exe ;;
+    go)     TARGET_EXT=.exe ;;
+    java)   TARGET_EXT=.jar ;;
+    rs)     TARGET_EXT=.exe ;;
+    *)      TARGET_EXT=
+esac
+TARGET_FILE="$TARGET_DIR/$APP_NAME$TARGET_EXT"
 
 ##############################################################################
 ## Main

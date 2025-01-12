@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2018-2024 Stéphane Micheloud
+# Copyright (c) 2018-2025 Stéphane Micheloud
 #
 # Licensed under the MIT License.
 #
@@ -47,14 +47,18 @@ cleanup() {
 }
 
 args() {
-    [[ $# -eq 0 ]] && HELP=true && return 1
+    [[ $# -eq 0 ]] && HELP=1 && return 1
 
     for arg in "$@"; do
         case "$arg" in
         ## options
-        -debug)    DEBUG=1 ;;
-        -help)     HELP=1 ;;
-        -verbose)  VERBOSE=1 ;;
+        -debug)        DEBUG=1 ;;
+        -help)         HELP=1 ;;
+        -target:go     TARGET=native ;;
+        -target:java   TARGET=java ;;
+        -target:native TARGET=native ;;
+        -target:rs     TARGET=rs ;;
+        -verbose)      VERBOSE=1 ;;
         -*)
             error "Unknown option \"$arg\""
             EXITCODE=1 && return 0
@@ -98,7 +102,7 @@ clean() {
     if [[ -d "$TARGET_DIR" ]]; then
         if [[ $DEBUG -eq 1 ]]; then
             debug "Delete directory \"$TARGET_DIR\""
-        elif [[$VERBOSE -eq 1 ]]; then
+        elif [[ $VERBOSE -eq 1 ]]; then
             echo "Delete directory \"${TARGET_DIR/$ROOT_DIR\//}\"" 1>&2
         fi
         rm -rf "$TARGET_DIR"
@@ -109,12 +113,12 @@ clean() {
 compile() {
     [[ -d "$TARGET_DIR" ]] || mkdir -p "$TARGET_DIR"
 
-    local is_required="$(action_required "$TARGET_FILE" "$SOURCE_DIR/main/dart/" "*.dart")"
+    local is_required="$(action_required "$TARGET_FILE" "$SOURCE_DIR/" "*.dfy")"
     [[ $is_required -eq 0 ]] && return 1
 
     local source_files=
     local n=0
-    for f in $(find "$SOURCE_DIR/main/dart/" -type f -name "*.dart" 2>/dev/null); do
+    for f in $(find "$SOURCE_DIR/" -type f -name "*.dfy" 2>/dev/null); do
         source_files="$source_files\"$f\" "
         n=$((n + 1))
     done
@@ -127,13 +131,13 @@ compile() {
     local dafny_opts="--output \"$TARGET_FILE\""
     [[ $DEBUG -eq 1 ]] && dafny_opts="--verbose $dafny_opts"
     if [[ $DEBUG -eq 1 ]]; then
-        debug "$DART_CMD build $dafny_opts $source_files"
+        debug "$DAFNY_CMD build $dafny_opts $source_files"
     elif [[ $VERBOSE -eq 1 ]]; then
-        echo "Compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\"" 1>&2
+        echo "Compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\" with \"$TARGET\" target" 1>&2
     fi
-    eval "\"$DART_CMD\" builf $dafny_opts $source_files"
+    eval "\"$DAFNY_CMD\" build $dafny_opts $source_files"
     if [[ $? -ne 0 ]]; then
-        error "Failed to compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\""
+        error "Failed to compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\" with \"$TARGET\" target"
         cleanup 1
     fi  
 }
@@ -171,7 +175,7 @@ mixed_path() {
 
 run() {
     if [[ ! -f "$TARGET_FILE" ]]; then
-        error "Main program \"${MAIN_CLASS/$ROOT_DIR\//}\" not found"
+        error "Main program \"${TARGET_FILE/$ROOT_DIR\//}\" not found"
         cleanup 1
     fi
     if [[ $DEBUG -eq 1 ]]; then
@@ -210,6 +214,7 @@ COMPILE=0
 DEBUG=0
 HELP=0
 RUN=0
+TARGET=native
 TIMER=0
 VERBOSE=0
 
@@ -220,11 +225,13 @@ cygwin=0
 mingw=0
 msys=0
 darwin=0
+linux=0
 case "$(uname -s)" in
     CYGWIN*) cygwin=1 ;;
     MINGW*)  mingw=1 ;;
     MSYS*)   msys=1 ;;
-    Darwin*) darwin=1
+    Darwin*) darwin=1 ;;
+    Linux*)  linux=1
 esac
 unset CYGPATH_CMD
 PSEP=":"
@@ -237,20 +244,19 @@ if [[ $(($cygwin + $mingw + $msys)) -gt 0 ]]; then
 else
     DIFF_CMD="$(which diff)"
 fi
-if [[ ! -x "$DAFNY_HOME/bin/dart" ]]; then
-    error "Dart installation not found"
+if [[ ! -x "$DAFNY_HOME/Dafny.exe" ]]; then
+    error "Dafny installation not found"
     cleanup 1
 fi
 DAFNY_CMD="$DAFNY_HOME/Dafny.exe"
 
 PROJECT_NAME="$(basename $ROOT_DIR)"
-PROJECT_URL="github.com/$USER/dart-examples"
+PROJECT_URL="github.com/$USER/dafny-examples"
 PROJECT_VERSION="1.0-SNAPSHOT"
 
-APP_NAME="Fibonacci"
-APP_VERSION="0.1.0"
+APP_NAME="DutchFlag"
 
-TARGET_FILE="$TARGET_DIR/$APP_NAME-$APP_VERSION.exe"
+TARGET_FILE="$TARGET_DIR/$APP_NAME.exe"
 
 args "$@"
 [[ $EXITCODE -eq 0 ]] || cleanup 1

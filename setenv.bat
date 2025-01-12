@@ -24,6 +24,7 @@ if %_HELP%==1 (
 )
 
 set _GIT_PATH=
+set _GOLANG_PATH=
 set _VSCODE_PATH=
 
 call :dafny
@@ -32,13 +33,26 @@ if not %_EXITCODE%==0 goto end
 call :git
 if not %_EXITCODE%==0 goto end
 
+call :golang
+if not %_EXITCODE%==0 (
+    @rem optional
+    echo %_WARNING_LABEL% Go installation not found ^(optional^) 1>&2
+    set _EXITCODE=0
+)
+
 call :java 17 "temurin"
 if not %_EXITCODE%==0 goto end
 
+call :rust
+if not %_EXITCODE%==0 (
+    @rem optional
+    echo %_WARNING_LABEL% Rust installation not found ^(optional^) 1>&2
+    set _EXITCODE=0
+)
 call :vscode
 if not %_EXITCODE%==0 (
     @rem optional
-    echo %_WARNING_LABEL% VS Code installation not found 1>&2
+    echo %_WARNING_LABEL% VS Code installation not found ^(optional^) 1>&2
     set _EXITCODE=0
 )
 goto end
@@ -55,6 +69,9 @@ call :env_colors
 set _DEBUG_LABEL=%_NORMAL_BG_CYAN%[%_BASENAME%]%_RESET%
 set _ERROR_LABEL=%_STRONG_FG_RED%Error%_RESET%:
 set _WARNING_LABEL=%_STRONG_FG_YELLOW%Warning%_RESET%:
+
+set "_GOPATH=%USERPROFILE%\go"
+set "_GOBIN=%_GOPATH%\bin"
 goto :eof
 
 :env_colors
@@ -310,6 +327,44 @@ if not exist "%_GIT_HOME%\bin\git.exe" (
 set "_GIT_PATH=;%_GIT_HOME%\bin;%_GIT_HOME%\mingw64\bin;%_GIT_HOME%\usr\bin"
 goto :eof
 
+@rem output parameters: _GOLANG_HOME, _GOLANG_PATH
+:golang
+set _GOLANG_HOME=
+set _GOLANG_PATH=
+
+set __GO_CMD=
+for /f "delims=" %%f in ('where go.exe 2^>NUL') do set "__GO_CMD=%%f"
+if defined __GO_CMD (
+    for /f "delims=" %%i in ("%__GO_CMD%") do set "__GO_BIN_DIR=%%~dpi"
+    for /f "delims=" %%f in ("!__GO_BIN_DIR!.") do set "_GOLANG_HOME=%%~dpf"
+    if %_DEBUG%==1 echo %_DEBUG_LABEL% Using path of Go executable found in PATH 1>&2
+    @rem keep _GOLANG_PATH undefined since executable already in path
+    goto :eof
+) else if defined GO_HOME (
+    set "_GOLANG_HOME=%GO_HOME%"
+    if %_DEBUG%==1 echo %_DEBUG_LABEL% Using environment variable GO_HOME
+) else (
+    set __PATH=C:\opt
+    if exist "!__PATH!\Go\" ( set "_GOLANG_HOME=!__PATH!\Go"
+    ) else (
+        for /f "delims=" %%f in ('dir /ad /b "!__PATH!\Go-*" 2^>NUL') do set "_GOLANG_HOME=!__PATH!\%%f"
+        if not defined _GOLANG_HOME (
+            set "__PATH=%ProgramFiles%"
+            for /f "delims=" %%f in ('dir /ad /b "!__PATH!\Go-*" 2^>NUL') do set "_GOLANG_HOME=!__PATH!\%%f"
+        )
+    )
+    if defined _GOLANG_HOME (
+        if %_DEBUG%==1 echo %_DEBUG_LABEL% Using default Go installation directory "!_GOLANG_HOME!" 1>&2
+    )
+)
+if not exist "%_GOLANG_HOME%\bin\go.exe" (
+    echo %_ERROR_LABEL% Go executable not found ^("%_GOLANG_HOME%"^) 1>&2
+    set _EXITCODE=1
+    goto :eof
+)
+set "_GOLANG_PATH=;%_GOLANG_HOME%\bin"
+goto :eof
+
 @rem input parameters:%1=required version %2=vendor 
 @rem output parameter: _JAVA_HOME (resp. JAVA11_HOME)
 :java
@@ -378,6 +433,33 @@ if "%__PREFIX%"=="1." ( set _JDK_VERSION=%__JAVAC_VERSION:~2,1%
 )
 goto :eof
 
+@rem output parameters: _CARGO_HOME, _CARGO_PATH
+:rust
+set _CARGO_HOME=
+set _CARGO_PATH=
+
+set __CARGO_CMD=
+for /f "delims=" %%f in ('where cargo.exe 2^>NUL') do set "__CARGO_CMD=%%f"
+if defined __CARGO_CMD (
+    for /f "delims=" %%i in ("%__CARGO_CMD%") do set "__CARGO_BIN_DIR=%%~dpi"
+    for /f "delims=" %%f in ("!__CARGO_BIN_DIR!\.") do set "_CARGO_HOME=%%~dpf"
+    if %_DEBUG%==1 echo %_DEBUG_LABEL% Using path of Rust executable found in PATH 1>&2
+    goto :eof
+) else if defined CARGO_HOME (
+    set "_CARGO_HOME=%CARGO_HOME%"
+    if %_DEBUG%==1 echo %_DEBUG_LABEL% Using environment variable CARGO_HOME 1>&2
+) else if exist "%USERPROFILE%\.cargo\bin\cargo.exe" (
+    set "_CARGO_HOME=%USERPROFILE%\.cargo"
+    if %_DEBUG%==1 echo %_DEBUG_LABEL% Using default Rust installation directory "!_CARGO_HOME!" 1>&2
+)
+if not exist "%_CARGO_HOME%\bin\cargo.exe" (
+    echo %_ERROR_LABEL% Cargo executable not found ^("%_CARGO_HOME%"^) 1>&2
+    set _EXITCODE=1
+    goto :eof
+)
+set "_CARGO_PATH=;%_CARGO_HOME%\bin"
+goto :eof
+
 @rem output parameters: _VSCODE_HOME, _VSCODE_PATH
 :vscode
 set _VSCODE_HOME=
@@ -386,6 +468,7 @@ set _VSCODE_PATH=
 set __CODE_CMD=
 for /f "delims=" %%f in ('where code.exe 2^>NUL') do set "__CODE_CMD=%%f"
 if defined __CODE_CMD (
+    for /f "delims=" %%i in ("%__CODE_CMD%") do set "_VSCODE_HOME=%%~dpi"
     if %_DEBUG%==1 echo %_DEBUG_LABEL% Using path of VSCode executable found in PATH 1>&2
     @rem keep _VSCODE_PATH undefined since executable already in path
     goto :eof
@@ -401,6 +484,9 @@ if defined __CODE_CMD (
             set "__PATH=%ProgramFiles%"
             for /f "delims=" %%f in ('dir /ad /b "!__PATH!\VSCode-1*" 2^>NUL') do set "_VSCODE_HOME=!__PATH!\%%f"
         )
+    )
+    if defined _VSCODE_HOME (
+        if %_DEBUG%==1 echo %_DEBUG_LABEL% Using default VSCode installation directory "!_VSCODE_HOME!" 1>&2
     )
 )
 if not exist "%_VSCODE_HOME%\code.exe" (
@@ -418,11 +504,27 @@ goto :eof
 set __VERBOSE=%1
 set __VERSIONS_LINE1=
 set __VERSIONS_LINE2=
+set __VERSIONS_LINE3=
 set __WHERE_ARGS=
+where /q "%CARGO_HOME%\bin:cargo.exe"
+if %ERRORLEVEL%==0 (
+    for /f "tokens=1,2,*" %%i in ('"%CARGO_HOME%\bin\cargo.exe" --version') do set "__VERSIONS_LINE1=%__VERSIONS_LINE1% cargo %%j,"
+    set __WHERE_ARGS=%__WHERE_ARGS% "%CARGO_HOME%\bin:cargo.exe"
+)
+where /q "%CARGO_HOME%\bin:rustc.exe"
+if %ERRORLEVEL%==0 (
+    for /f "tokens=1,2,*" %%i in ('"%CARGO_HOME%\bin\rustc.exe" --version') do set "__VERSIONS_LINE1=%__VERSIONS_LINE1% rustc %%j,"
+    set __WHERE_ARGS=%__WHERE_ARGS% "%CARGO_HOME%\bin:rustc.exe"
+)
 where /q "%DAFNY_HOME%:dafny.exe"
 if %ERRORLEVEL%==0 (
     for /f "tokens=1,* delims=+" %%i in ('"%DAFNY_HOME%\dafny.exe" --version 2^>^&1') do set "__VERSIONS_LINE1=%__VERSIONS_LINE1% dafny %%i,"
     set __WHERE_ARGS=%__WHERE_ARGS% "%DAFNY_HOME%:dafny.exe"
+)
+where /q "%JAVA_HOME%\bin:javac.exe"
+if %ERRORLEVEL%==0 (
+    for /f "tokens=1,2,*" %%i in ('call "%JAVA_HOME%\bin\javac.exe" -version 2^>^&1') do set "__VERSIONS_LINE2=%__VERSIONS_LINE2% javac %%j,"
+    set __WHERE_ARGS=%__WHERE_ARGS% "%JAVA_HOME%\bin:javac.exe"
 )
 where /q "%VSCODE_HOME%\bin:code.cmd"
 if %ERRORLEVEL%==0 (
@@ -430,21 +532,35 @@ if %ERRORLEVEL%==0 (
     for /f "tokens=*" %%i in ('"%VSCODE_HOME%\bin\code.cmd" --version') do (
         if not defined __VSCODE_VERSION (
             set __VSCODE_VERSION=%%i
-            set "__VERSIONS_LINE1=%__VERSIONS_LINE1% code !__VSCODE_VERSION!,"
+            set "__VERSIONS_LINE2=%__VERSIONS_LINE2% code !__VSCODE_VERSION!,"
         )
     )
     set __WHERE_ARGS=%__WHERE_ARGS% "%VSCODE_HOME%\bin:code.cmd"
 )
+where /q "%GOROOT%\bin:go.exe"
+if %ERRORLEVEL%==0 (
+    setlocal enabledelayedexpansion
+    for /f "tokens=1,2,3,*" %%i in ('"%GOROOT%\bin\go.exe" version') do set "__TOKEN=%%k"
+    set "__VERSIONS_LINE2=%__VERSIONS_LINE2% go !__TOKEN:go=!,"
+    set __WHERE_ARGS=%__WHERE_ARGS% "%GOROOT%\bin:go.exe"
+)
+where /q "%GOBIN%:goimports.exe"
+if %ERRORLEVEL%==0 (
+    for /f "tokens=1,2,3,*" %%i in ('call "%GOROOT%\bin\go.exe" version -m "%GOBIN%\goimports.exe" ^| findstr mod.^*tools') do (
+        set "__VERSIONS_LINE2=%__VERSIONS_LINE2% goimports %%k,"
+    )
+    set __WHERE_ARGS=%__WHERE_ARGS% "%GOBIN%:goimports.exe"
+)
 where /q "%GIT_HOME%\bin:git.exe"
 if %ERRORLEVEL%==0 (
     for /f "tokens=1,2,*" %%i in ('"%GIT_HOME%\bin\git.exe" --version') do (
-        for /f "delims=. tokens=1,2,3,*" %%a in ("%%k") do set "__VERSIONS_LINE2=%__VERSIONS_LINE2% git %%a.%%b.%%c,"
+        for /f "delims=. tokens=1,2,3,*" %%a in ("%%k") do set "__VERSIONS_LINE3=%__VERSIONS_LINE3% git %%a.%%b.%%c,"
     )
     set __WHERE_ARGS=%__WHERE_ARGS% "%GIT_HOME%\bin:git.exe"
 )
 where /q "%GIT_HOME%\usr\bin:diff.exe"
 if %ERRORLEVEL%==0 (
-    for /f "tokens=1-3,*" %%i in ('"%GIT_HOME%\usr\bin\diff.exe" --version ^| findstr diff') do set "__VERSIONS_LINE2=%__VERSIONS_LINE2% diff %%l,"
+    for /f "tokens=1-3,*" %%i in ('"%GIT_HOME%\usr\bin\diff.exe" --version ^| findstr diff') do set "__VERSIONS_LINE3=%__VERSIONS_LINE3% diff %%l,"
     set __WHERE_ARGS=%__WHERE_ARGS% "%GIT_HOME%\usr\bin:diff.exe"
 )
 where /q "%GIT_HOME%\bin:bash.exe"
@@ -452,13 +568,14 @@ if %ERRORLEVEL%==0 (
     for /f "tokens=1-3,4,*" %%i in ('"%GIT_HOME%\bin\bash.exe" --version ^| findstr bash') do (
         set "__VERSION=%%l"
         setlocal enabledelayedexpansion
-        set "__VERSIONS_LINE2=%__VERSIONS_LINE2% bash !__VERSION:-release=!"
+        set "__VERSIONS_LINE3=%__VERSIONS_LINE3% bash !__VERSION:-release=!"
     )
     set __WHERE_ARGS=%__WHERE_ARGS% "%GIT_HOME%\bin:bash.exe"
 )
 echo Tool versions:
 echo   %__VERSIONS_LINE1%
 echo   %__VERSIONS_LINE2%
+echo   %__VERSIONS_LINE3%
 if %__VERBOSE%==1 (
     echo Tool paths: 1>&2
     for /f "tokens=*" %%p in ('where %__WHERE_ARGS%') do (
@@ -467,8 +584,12 @@ if %__VERBOSE%==1 (
         echo    !__LINE:%USERPROFILE%=%%USERPROFILE%%! 1>&2
     )
     echo Environment variables: 1>&2
+    if defined CARGO_HOME echo    "CARGO_HOME=!CARGO_HOME:%USERPROFILE%=%%USERPROFILE%%!" 1>&2
     if defined DAFNY_HOME echo    "DAFNY_HOME=%DAFNY_HOME%" 1>&2
     if defined GIT_HOME echo    "GIT_HOME=%GIT_HOME%" 1>&2
+    if defined GOBIN echo    "GOBIN=!GOBIN:%USERPROFILE%=%%USERPROFILE%%!" 1>&2
+    if defined GOPATH echo    "GOPATH=%GOPATH%" 1>&2
+    if defined GOROOT echo    "GOROOT=%GOROOT%" 1>&2
     if defined JAVA_HOME echo    "JAVA_HOME=%JAVA_HOME%" 1>&2
     if defined VSCODE_HOME echo    "VSCODE_HOME=%VSCODE_HOME%" 1>&2
     echo Path associations: 1>&2
@@ -484,14 +605,20 @@ goto :eof
 @rem ## Cleanups
 
 :end
+where /q updatemds.bat
+set __UPDATE_PATH=%ERRORLEVEL%
 endlocal & (
     if %_EXITCODE%==0 (
+        if not defined CARGO_HOME set "CARGO_HOME=%_CARGO_HOME%"
         if not defined DAFNY_HOME set "DAFNY_HOME=%_DAFNY_HOME%"
         if not defined GIT_HOME set "GIT_HOME=%_GIT_HOME%"
+        if not defined GOBIN set "GOBIN=%_GOBIN%"
+        if not defined GOPATH set "GOPATH=%_GOPATH%"
+        if not defined GOROOT set "GOROOT=%_GOLANG_HOME%"
         if not defined JAVA_HOME set "JAVA_HOME=%_JAVA_HOME%"
-        if not defined VSCODE_HOME set "VSCODE_HOME=%VSCODE_HOME%"
-        @rem We prepend %_GIT_HOME%\bin to hide C:\Windows\System32\bash.exe
-        set "PATH=%_GIT_HOME%\bin;%PATH%%_MSYS_PATH%%_GIT_PATH%%_VSCODE_PATH%;%~dp0bin"
+        if not defined VSCODE_HOME set "VSCODE_HOME=%_VSCODE_HOME%"
+        @rem We prepend %_GIT_HOME%\bin to hide C:\Windows\System32\bash.exec
+        if %__UPDATE_PATH%==1 set "PATH=%_GIT_HOME%\bin;%PATH%%_MSYS_PATH%%_GIT_PATH%%_VSCODE_PATH%;%~dp0bin"
         call :print_env %_VERBOSE%
         if not "%CD:~0,2%"=="%_DRIVE_NAME%" (
             if %_DEBUG%==1 echo %_DEBUG_LABEL% cd /d %_DRIVE_NAME% 1>&2

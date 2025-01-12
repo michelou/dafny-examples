@@ -123,6 +123,30 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 </pre>
 </dd></dl>
 
+<span id="footnote_02">[2]</span> ***Missing .NET Framework 6*** [↩](#anchor_02)
+
+<dl><dd>
+<pre style="font-size:80%;">
+<b>&gt; c:\opt\dafny\Dafny.exe run src\Fib.dfy</b>
+&nbsp;
+Dafny program verifier finished with 3 verified, 0 errors
+It was not possible to find any compatible framework version
+The framework '<span style="color:darkred;">Microsoft.NETCore.App</span>', version '<span style="color:darkred;">6.0.0</span>' was not found.
+  - The following frameworks were found:
+      2.1.12 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
+      2.1.13 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
+      2.1.26 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
+      2.1.30 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
+      3.1.32 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
+      5.0.17 at [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
+&nbsp;
+You can resolve the problem by installing the specified framework and/or SDK.
+&nbsp;
+The specified framework can be found at:
+  - https://aka.ms/dotnet-core-applaunch?framework=Microsoft.NETCore.App&framework_version=6.0.0&arch=x64&rid=win10-x64
+</pre>
+</dd></dl>
+
 ***
 
 *[mics](https://lampwww.epfl.ch/~michelou/)/January 2025* [**&#9650;**](#top)  <!-- October 2023 -->
