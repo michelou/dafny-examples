@@ -42,7 +42,6 @@ set "_SOURCE_DIR=%_ROOT_DIR%src"
 set "_TARGET_DIR=%_ROOT_DIR%target"
 
 set "_APP_NAME=Competition"
-set "_EXE_FILE=%_TARGET_DIR%\%_APP_NAME%.exe"
 
 if not exist "%DAFNY_HOME%\dafny.exe" (
     echo %_ERROR_LABEL% Dafny installation not found 1>&2
@@ -156,16 +155,10 @@ if %_TARGET%==java if not defined _JAVA_CMD (
     echo %_WARNING_LABEL% Java installation directory not found 1>&2
     set _TARGET=native
 )
-if %_TARGET%==native ( set __TARGET_EXT=.exe
-) else if %_TARGET%==go ( set __TARGET_EXT=.exe
-) else if %_TARGET%==java ( set __TARGET_EXT=.jar
-) else if %_TARGET%==rs ( set __TARGET_EXT=.exe
-) else (
-    echo %_ERROR_LABEL% Unknown target "%_TARGET%" 1>&2
-    set _EXITCODE=1
-    goto :eof
+if %_TARGET%==java ( set "_TARGET_FILE=%_TARGET_DIR%\%_APP_NAME%.jar"
+) else if %_TARGET%==rs ( set "_TARGET_FILE=%_TARGET_DIR%\%_APP_NAME%-rust\target\debug\%_APP_NAME%.exe"
+) else ( set "_TARGET_FILE=%_TARGET_DIR%\%_APP_NAME%.exe"
 )
-set "_TARGET_FILE=%_TARGET_DIR%\%_APP_NAME%%__TARGET_EXT%"
 set "_TARGET_BUILD_FILE=%_TARGET_DIR%\target-build.txt"
 
 if %_DEBUG%==1 (
@@ -244,7 +237,6 @@ if %__N%==0 (
 ) else if %__N%==1 ( set __N_FILES=%__N% Dafny source file
 ) else ( set __N_FILES=%__N% Dafny source files
 )
-
 set __BUILD_OPTS=--output "%_TARGET_FILE%"
 if not %_TARGET%==native set __BUILD_OPTS=--target %_TARGET% %__BUILD_OPTS%
 

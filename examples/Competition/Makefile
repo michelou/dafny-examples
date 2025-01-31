@@ -5,6 +5,8 @@
 ##
 ##############################################################################
 
+TARGET ?= go
+
 include ../Makefile.inc
 
 PROJECT_NAME ?= $(shell basename $(CURDIR))
@@ -16,33 +18,20 @@ TARGET_DOCS_DIR = $(TARGET_DIR)/docs
 ##############################################################################
 ## main rules
 
-SOURCES = $(wildcard $(SOURCE_DIR)/main.rs)
-TARGET  = $(TARGET_EXE_DIR)/$(PROJECT_NAME)$(TARGET_EXT)
+SOURCES = $(wildcard $(SOURCE_DIR)/Main.dfy)
+TARGET_FILE = $(TARGET_DIR)/$(PROJECT_NAME)$(TARGET_EXT)
+XXX_FILE = $(realpath $(TARGET_DIR)/.)/$(PROJECT_NAME)$(TARGET_EXT)
 
-## General format: <arch>-<vendor>-<sys>-<abi>
-## rustc --print target-list
-TARGET_TRIPLE=x86_64-pc-windows-msvc
-
-CRATE_NAME=main
-EDITION=2018
-
-## Lint levels: -A (allow), -W (warning), -D (deny), -F (forbid)
-## See https://doc.rust-lang.org/rustc/lints/levels.html
-RUST_LINT_OPTS=
-RUST_CRATE_OPTS=--crate-name "$(CRATE_NAME)" --crate-type bin
-## https://crates.io/crates/paste/1.0.15/
-## https://github.com/rust-random/rand/releases/tag/0.8.5
-RUST_DEPS_OPTS=-L "$(TARGET_DIR)/paste-1.0.15/target/debug" -L "$(TARGET_DIR)/rand-0.8.5/target/debug"
-
-RUSTC_OPTS=$(RUST_LINT_OPTS) $(RUST_CRATE_OPTS) --edition $(EDITION) --out-dir "$(TARGET_DIR)" --target "$(TARGET_TRIPLE)" $(RUST_DEPS_OPTS)
+BUILD_OPTS = $(if $(filter native,$(TARGET)),,--target $(TARGET)) -output "$(XXX_FILE)"
 
 all: build
 
-build: $(TARGET)
+build: $(TARGET_FILE)
 
-$(TARGET): $(SOURCES)
+$(TARGET_FILE): $(SOURCES)
 	[ -d "$(TARGET_DIR)" ] || "$(MKDIR)" -p "$(TARGET_DIR)"
-	"$(RUSTC)" $(RUSTC_OPTS) $(SOURCES)
+	PATH=$(PATH):$(GOROOT)/bin:$(GOBIN) && \
+	"$(DAFNY)" build $(BUILD_OPTS) $(SOURCES)
 
 clean:
 	"$(RM)" -rf "$(TARGET_DIR)"
@@ -50,7 +39,7 @@ clean:
 compile: build
 
 run: build
-	$(TARGET)
+	$(TARGET_FILE)
 
 help:
 	@$(ECHO) "Usage: make all|build|clean|doc|help|lint|run|test"

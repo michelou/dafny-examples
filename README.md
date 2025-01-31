@@ -18,24 +18,26 @@
 
 - [Dafny 4.9][dafny_downloads] ([*release notes*][dafny_relnotes])
 - [Git 2.47][git_downloads] ([*release notes*][git_relnotes])
-- [Microsoft .NET 6.0 SDK][dotnet_sdk_downloads] ([*release notes*][dotnet_sdk_relnotes])
+- [Microsoft .NET 6.0 SDK][dotnet_sdk_downloads]<sup id="anchor_01">[1](#footnote_01)</sup> ([*release notes*][dotnet_sdk_relnotes])
 
 Optionally one may also install the following software:
 
 - [ConEmu 2023][conemu_downloads] ([*release notes*][conemu_relnotes])
 - [Dafny for Visual Studio Code 3.4](https://github.com/dafny-lang/ide-vscode) ([*release notes*][ide-vscode_relnotes])
-- [Temurin OpenJDK 17 LTS][temurin_openjdk17] <sup id="anchor_02">[2](#footnote_02)</sup> ([*release notes*][temurin_openjdk17_relnotes], [*bug fixes*][temurin_openjdk17_bugfixes], [Java 17 API][oracle_openjdk17_api])
+- [Temurin OpenJDK 17 LTS][temurin_openjdk17] ([*release notes*][temurin_openjdk17_relnotes], [*bug fixes*][temurin_openjdk17_bugfixes], [Java 17 API][oracle_openjdk17_api])
 - [Visual Studio Code 1.96][vscode_downloads] ([*release notes*][vscode_relnotes])
 
 > **&#9755;** ***Installation policy***<br/>
 > When possible we install software from a [Zip archive][zip_archive] rather than via a [Windows installer][windows_installer]. In our case we defined **`C:\opt\`** as the installation directory for optional software tools (*in reference to* the [`/opt/`][unix_opt] directory on Unix).
 
-For instance our development environment looks as follows (*January 2025*) <sup id="anchor_01">[1](#footnote_01)</sup>:
+For instance our development environment looks as follows (*February 2025*) <sup id="anchor_02">[2](#footnote_02)</sup>:
 
 <pre style="font-size:80%;">
 C:\opt\ConEmu\                        <i>( 26 MB)</i>
-C:\opt\Git\                           <i>(393 MB)</i>
 C:\opt\dafny\                         <i>(133 MB)</i>
+C:\opt\Git\                           <i>(393 MB)</i>
+C:\opt\go\                            <i>(232 MB)</i>
+C:\opt\jdk-temurin-17.0.14_7\         <i>(302 MB)</i>
 C:\opt\VSCode\                        <i>(381 MB)</i>
 C:\Program Files\dotnet\sdk\6.0.428\  <i>(329 MB)</i>
 </pre>
@@ -65,14 +67,15 @@ where
 
 ## <span id="commands">Batch commands</span> [**&#x25B4;**](#top)
 
-### **`setenv.bat`** <sup id="anchor_04">[4](#footnote_04)</sup>
+### **`setenv.bat`**
 
 We execute command [**`setenv`**](setenv.bat) once to setup our development environment; it makes external tools such as [**`git.exe`**][git_cli] and [**`sh.exe`**][sh_cli] directly available from the command prompt.
 
 <pre style="font-size:80%;">
 <b>&gt; <a href="setenv.bat">setenv</a></b>
 Tool versions:
-   dafny 4.9.1, code 1.96.2,
+   cargo 1.84.0, rustc 1.84.0, dafny 4.9.1,
+   javac 17.0.14, code 1.96.4, go 1.23.4, goimports v0.29.0,
    git 2.47.1, diff 3.10, bash 5.2.37(1)
 
 <b>&gt; <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/where_1" rel="external">where</a> git sh</b>
@@ -91,17 +94,29 @@ Command [**`setenv`**](./setenv.bat)`-verbose` also prints :
 <pre style="font-size:80%;">
 <b>&gt; <a href="./setenv.bat">setenv</a> -verbose</b>
 Tool versions:
-   dafny 4.9.1, code 1.96.2,
+   cargo 1.84.0, rustc 1.84.0, dafny 4.9.1,
+   javac 17.0.14, code 1.96.4, go 1.23.4, goimports v0.29.0,
    git 2.47.1, diff 3.10, bash 5.2.37(1)
 Tool paths:
+   %USERPROFILE%\.cargo\bin\cargo.exe
+   %USERPROFILE%\.cargo\bin\rustc.exe
    C:\opt\dafny\Dafny.exe
+   C:\opt\jdk-temurin-17.0.14_7\bin\javac.exe
+   C:\opt\VSCode\bin\code.cmd
+   C:\opt\go\bin\go.exe
+   %USERPROFILE%\go\bin\goimports.exe
    C:\opt\Git\bin\git.exe
    C:\opt\Git\usr\bin\diff.exe
    C:\opt\Git\bin\bash.exe
 Environment variables:
+   "CARGO_HOME=%USERPROFILE%\.cargo"
    "DAFNY_HOME=C:\opt\dafny"
    "GIT_HOME=C:\opt\Git"
-   "JAVA_HOME=C:\opt\jdk-temurin-17.0.13_11"
+   "GOBIN=%USERPROFILE%\go\bin"
+   "GOPATH=C:\Users\michelou\go"
+   "GOROOT=C:\opt\Go"
+   "JAVA_HOME=C:\opt\jdk-temurin-17.0.14_7"
+   "VSCODE_HOME=C:\opt\VSCode"
 Path associations:
    G:\: => %USERPROFILE%\workspace-perso\dafny-examples
 </pre>
@@ -109,23 +124,11 @@ Path associations:
 
 ## <span id="footnotes">Footnotes</span> [**&#x25B4;**](#top)
 
-<span id="footnote_01">[1]</span> ***Downloads*** [↩](#anchor_01)
+<span id="footnote_01">[1]</span> ***Missing .NET Framework 6*** [↩](#anchor_01)
 
 <dl><dd>
-In our case we downloaded the following installation files (<a href="#proj_deps">see section 1</a>):
-</dd>
-<dd>
-<pre style="font-size:80%;">
-<a href="https://github.com/dafny-lang/dafny/releases" rel="external">dafny-4.9.1-x64-windows-2019.zip</a>   <i>(60 MB)</i>
-<a href="https://dotnet.microsoft.com/en-us/download/dotnet/6.0" rel="external">dotnet-sdk-6.0.428-win-x64.exe</a>    <i>(198 MB)</i>
-<a href="https://git-scm.com/download/win" rel="external">PortableGit-2.47.1-64-bit.7z.exe</a>   <i>(55 MB)</i>
-<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.96.2.zip</a>       <i>(131 MB)</i>
-</pre>
-</dd></dl>
+Dafny requires the <a href"=https://dotnet.microsoft.com/en-us/download/dotnet/6.0">Microsoft .NET Framework 6.0</a> to be installed; otherwise the following runtime error occurs :
 
-<span id="footnote_02">[2]</span> ***Missing .NET Framework 6*** [↩](#anchor_02)
-
-<dl><dd>
 <pre style="font-size:80%;">
 <b>&gt; c:\opt\dafny\Dafny.exe run src\Fib.dfy</b>
 &nbsp;
@@ -145,11 +148,54 @@ You can resolve the problem by installing the specified framework and/or SDK.
 The specified framework can be found at:
   - https://aka.ms/dotnet-core-applaunch?framework=Microsoft.NETCore.App&framework_version=6.0.0&arch=x64&rid=win10-x64
 </pre>
+
+<!--
+We can easily check the DLL dependencies with the command line tool such as <code>pelook.exe</code> :
+
+<pre style="font-size:80%;">
+<b>&gt; bin\pelook.exe C:\opt\dafny\Dafny.exe | <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr" rel="external">findstr</a> /b import</b>
+import modules:       KERNEL32.dll, USER32.dll, SHELL32.dll, ADVAPI32.dll, api-ms-win-crt-runtime-l1-1-0.dll, api-ms-win-crt-stdio-l1-1-0.dll, api-ms-win-crt-heap-l1-1-0.dll, api-ms-win-crt-string-l1-1-0.dll, api-ms-win-crt-convert-l1-1-0.dll, api-ms-win-crt-locale-l1-1-0.dll, api-ms-win-crt-math-l1-1-0.dll, api-ms-win-crt-time-l1-1-0.dll
+&nbsp;
+<b>&gt; <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/pushd">pushd</a> "%ProgramFiles%\dotnet\shared\Microsoft.NETCore.App\6.0.36" && <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dir">dir</a> /b api-ms-win-crt-*&& <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/popd">popd</a></b>
+api-ms-win-crt-conio-l1-1-0.dll
+api-ms-win-crt-convert-l1-1-0.dll
+api-ms-win-crt-environment-l1-1-0.dll
+api-ms-win-crt-filesystem-l1-1-0.dll
+api-ms-win-crt-heap-l1-1-0.dll
+api-ms-win-crt-locale-l1-1-0.dll
+api-ms-win-crt-math-l1-1-0.dll
+api-ms-win-crt-multibyte-l1-1-0.dll
+api-ms-win-crt-private-l1-1-0.dll
+api-ms-win-crt-process-l1-1-0.dll
+api-ms-win-crt-runtime-l1-1-0.dll
+api-ms-win-crt-stdio-l1-1-0.dll
+api-ms-win-crt-string-l1-1-0.dll
+api-ms-win-crt-time-l1-1-0.dll
+api-ms-win-crt-utility-l1-1-0.dll
+</pre>
+-->
+</dd></dl>
+
+<span id="footnote_02">[2]</span> ***Downloads*** [↩](#anchor_02)
+
+<dl><dd>
+In our case we downloaded the following installation files (<a href="#proj_deps">see section 1</a>):
+</dd>
+<dd>
+<pre style="font-size:80%;">
+<a href="https://github.com/dafny-lang/dafny/releases" rel="external">dafny-4.9.1-x64-windows-2019.zip</a>                  <i>( 60 MB)</i>
+<a href="https://dotnet.microsoft.com/en-us/download/dotnet/6.0" rel="external">dotnet-sdk-6.0.428-win-x64.exe</a>                    <i>(198 MB)</i>
+<a href="https://golang.org/dl/#stable" rel="external">go1.23.4.windows-amd64.zip</a>                        <i>( 70 MB)</i>
+<a href="https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot">OpenJDK17U-jdk_x64_windows_hotspot_17.0.14_7.zip</a>  <i>(188 MB)</i>
+<a href="https://git-scm.com/download/win" rel="external">PortableGit-2.47.1-64-bit.7z.exe</a>                  <i>( 55 MB)</i>
+<a href="https://www.rust-lang.org/tools/install">rust-init.exe</a>                                     <i>(  8 MB)</i>
+<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.96.4.zip</a>                       <i>(131 MB)</i>
+</pre>
 </dd></dl>
 
 ***
 
-*[mics](https://lampwww.epfl.ch/~michelou/)/January 2025* [**&#9650;**](#top)  <!-- October 2023 -->
+*[mics](https://lampwww.epfl.ch/~michelou/)/February 2025* [**&#9650;**](#top)  <!-- October 2023 -->
 <span id="bottom">&nbsp;</span>
 
 <!-- link refs -->

@@ -8,7 +8,7 @@
   </tr>
 </table>
 
-## <span id="fib">Fibonacci</span>
+## <span id="fib">`Fibonacci` Example</span>
 
 This example has the following directory structure :
 
@@ -115,7 +115,7 @@ fib(10)=55
 > </pre>
 
 <!--================================================================-->
-## <span id="getting_started">GettingStarted</span>
+## <span id="getting_started">`GettingStarted` Example</span>
 
 This example has the following directory structure :
 
@@ -177,7 +177,7 @@ go: downloading golang.org/x/sync v0.10.0
 
 ***
 
-*[mics](https://lampwww.epfl.ch/~michelou/)/January 2025* [**&#9650;**](#top)
+*[mics](https://lampwww.epfl.ch/~michelou/)/February 2025* [**&#9650;**](#top)
 <span id="bottom">&nbsp;</span>
 
 <!-- link refs -->

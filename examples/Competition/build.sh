@@ -270,7 +270,7 @@ PROJECT_NAME="$(basename $ROOT_DIR)"
 PROJECT_URL="github.com/$USER/dafny-examples"
 PROJECT_VERSION="1.0-SNAPSHOT"
 
-APP_NAME="DutchFlag"
+APP_NAME="Competition"
 
 args "$@"
 [[ $EXITCODE -eq 0 ]] || cleanup 1
