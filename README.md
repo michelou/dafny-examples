@@ -17,7 +17,7 @@
 ## <span id="proj_deps">Project dependencies</span>
 
 - [Dafny 4.10][dafny_downloads] ([*release notes*][dafny_relnotes])
-- [Git 2.47][git_downloads] ([*release notes*][git_relnotes])
+- [Git 2.48][git_downloads] ([*release notes*][git_relnotes])
 - [Microsoft .NET 6.0 SDK][dotnet_sdk_downloads]<sup id="anchor_01">[1](#footnote_01)</sup> ([*release notes*][dotnet_sdk_relnotes])
 
 Optionally one may also install the following software:
