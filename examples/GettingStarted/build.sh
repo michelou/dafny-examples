@@ -54,6 +54,7 @@ args() {
         ## options
         -debug)         DEBUG=1 ;;
         -help)          HELP=1 ;;
+        -target:cs)     TARGET=cs ;;
         -target:go)     TARGET=native ;;
         -target:java)   TARGET=java ;;
         -target:native) TARGET=native ;;
@@ -99,7 +100,7 @@ Usage: $BASENAME { <option> | <subcommand> }
     run             execute the generated program "${TARGET_FILE/$ROOT_DIR\//}"
 
   Target names:
-    native (default), go, java, rs
+    native (default), cs (C#), go, java, rs
 EOS
 }
 
@@ -138,6 +139,7 @@ compile() {
 
     local path="$PATH"
     case "$TARGET" in
+        cs)   export PATH="$MSVS_HOME/MSBuild/Current/Bin/Roslyn:$PATH" ;;
         go)   export PATH="$GOROOT/bin:$GOBIN:$PATH" ;;
         java) export PATH="$JAVA_HOME/bin:$PATH" ;;
         rs)   export PATH="$CARGO_HOME/bin:$PATH" ;;
@@ -151,7 +153,7 @@ compile() {
     eval "\"$DAFNY_CMD\" build $build_opts $source_files"
     if [[ $? -ne 0 ]]; then
         export PATH="$path"
-        error "Failed to compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\" with \"$TARGET\" target"
+        error "Failed to compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\" with target \"$TARGET\""
         cleanup 1
     fi
     export PATH="$path"
@@ -256,6 +258,7 @@ if [[ $(($cygwin + $mingw + $msys)) -gt 0 ]]; then
     [[ -n "$DAFNY_HOME" ]] && DAFNY_HOME="$(mixed_path $DAFNY_HOME)"
     [[ -n "$GIT_HOME" ]] && GIT_HOME="$(mixed_path $GIT_HOME)"
     [[ -n "$JAVA_HOME" ]] && JAVA_HOME="$(mixed_path $JAVA_HOME)"
+    [[ -n "$MSVS_HOME" ]] && MSVS_HOME="$(mixed_path $MSVS_HOME)"
     DIFF_CMD="$GIT_HOME/usr/bin/diff.exe"
 else
     DIFF_CMD="$(which diff)"
@@ -276,6 +279,7 @@ args "$@"
 [[ $EXITCODE -eq 0 ]] || cleanup 1
 
 case "$TARGET" in
+    cs)     TARGET_EXT=.exe ;;
     native) TARGET_EXT=.exe ;;
     go)     TARGET_EXT=.exe ;;
     java)   TARGET_EXT=.jar ;;

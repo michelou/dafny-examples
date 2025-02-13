@@ -122,6 +122,7 @@ if not defined __ARG (
 if "%__ARG:~0,1%"=="-" (
     @rem option
     if "%__ARG%"=="-debug" ( set _DEBUG=1
+    ) else if "%__ARG%"=="-target:cs" ( set _TARGET=cs
     ) else if "%__ARG%"=="-target:go" ( set _TARGET=go
     ) else if "%__ARG%"=="-target:java" ( set _TARGET=java
     ) else if "%__ARG%"=="-target:native" ( set _TARGET=native
@@ -197,7 +198,7 @@ echo     %__BEG_O%help%__END%            print this help message
 echo     %__BEG_O%run%__END%             execute main program "%__BEG_N%!_TARGET_FILE:%_ROOT_DIR%=!%__END%"
 echo.
 echo   %__BEG_P%Target names:%__END%
-echo     %__BEG_O%native%__END% ^(default^), %__BEG_O%go%__END%, %__BEG_O%java%__END%, %__BEG_O%rs%__END%
+echo     %__BEG_O%native%__END% ^(default^), %__BEG_O%cs%__END%, %__BEG_O%go%__END%, %__BEG_O%java%__END%, %__BEG_O%rs%__END%
 goto :eof
 
 @rem #########################################################################
@@ -241,17 +242,18 @@ set __BUILD_OPTS=--output "%_TARGET_FILE%"
 if not %_TARGET%==native set __BUILD_OPTS=--target %_TARGET% %__BUILD_OPTS%
 
 set "__PATH=%PATH%"
-if %_TARGET%==go ( set "PATH=%__PATH%;%GOROOT%\bin;%GOBIN%"
+if %_TARGET%==cs ( set "PATH=%__PATH%;%MSVS_HOME%\MSBuild\Current\Bin\Roslyn"
+) else if %_TARGET%==go ( set "PATH=%__PATH%;%GOROOT%\bin;%GOBIN%"
 ) else if %_TARGET%==java set "PATH=%__PATH%;%JAVA_HOME%\bin"
 ) else if %_TARGET%==rs ( set "PATH=%__PATH%;%CARGO_HOME%\bin"
 )
 if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "!_DAFNY_CMD:%DAFNY_HOME%=%%DAFNY_HOME%%!" build %__BUILD_OPTS% %__SOURCE_FILES% 1>&2
-) else if %_VERBOSE%==1 ( echo Build Dafny program "!_TARGET_FILE:%_ROOT_DIR%=!" with "%_TARGET%" target 1>&2
+) else if %_VERBOSE%==1 ( echo Build Dafny program "!_TARGET_FILE:%_ROOT_DIR%=!" with target "%_TARGET%" 1>&2
 )
 call "%_DAFNY_CMD%" build %__BUILD_OPTS% %__SOURCE_FILES%
 if not %ERRORLEVEL%==0 (
     if not %_TARGET%==native set "PATH=%__PATH%"
-    echo %_ERROR_LABEL% Failed to build Dafny program "!_TARGET_FILE:%_ROOT_DIR%=!" with "%_TARGET%" target 1>&2
+    echo %_ERROR_LABEL% Failed to build Dafny program "!_TARGET_FILE:%_ROOT_DIR%=!" with target "%_TARGET%" 1>&2
     set _EXITCODE=1
     goto :eof
 )
@@ -264,7 +266,7 @@ goto :eof
 if exist "%_TARGET_BUILD_FILE%" (
     set /p __TARGET_BUILD=<"%_TARGET_BUILD_FILE%"
 ) else (
-    echo %_WARNING_LABEL% Assume 'native' target 1>&2
+    echo %_WARNING_LABEL% Assume target 'native' 1>&2
     set __TARGET_BUILD=native
 )
 if %__TARGET_BUILD%==java (

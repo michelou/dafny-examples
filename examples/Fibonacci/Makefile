@@ -18,7 +18,7 @@ TARGET_DOCS_DIR = $(TARGET_DIR)/docs
 ##############################################################################
 ## main rules
 
-SOURCES = $(wildcard $(SOURCE_DIR)/Main.dfy)
+SOURCES = $(wildcard $(SOURCE_DIR)/Fib.dfy)
 TARGET_FILE = $(TARGET_DIR)/$(PROJECT_NAME)$(TARGET_EXT)
 
 BUILD_OPTS = $(if $(filter native,$(TARGET)),,--target $(TARGET)) --output "$(TARGET_FILE)"

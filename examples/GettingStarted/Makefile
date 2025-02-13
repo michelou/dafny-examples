@@ -5,7 +5,7 @@
 ##
 ##############################################################################
 
-TARGET ?= native
+TARGET ?= go
 
 include ../Makefile.inc
 
@@ -18,7 +18,7 @@ TARGET_DOCS_DIR = $(TARGET_DIR)/docs
 ##############################################################################
 ## main rules
 
-SOURCES = $(wildcard $(SOURCE_DIR)/Main.dfy)
+SOURCES = $(wildcard $(SOURCE_DIR)/$(PROJECT_NAME).dfy)
 TARGET_FILE = $(TARGET_DIR)/$(PROJECT_NAME)$(TARGET_EXT)
 
 BUILD_OPTS = $(if $(filter native,$(TARGET)),,--target $(TARGET)) --output "$(TARGET_FILE)"
@@ -28,9 +28,8 @@ all: build
 build: $(TARGET_FILE)
 
 $(TARGET_FILE): $(SOURCES)
-	@$(ECHO) "BUILD_OPTS=$(BUILD_OPTS)"
 	[ -d "$(TARGET_DIR)" ] || "$(MKDIR)" -p "$(TARGET_DIR)"
-	PATH="$(PATH):$(GOROOT)/bin:$(GOBIN)" && \
+	PATH=$(PATH):$(GOROOT)/bin:$(GOBIN) && \
 	"$(DAFNY)" build $(BUILD_OPTS) $(SOURCES)
 
 clean:
@@ -39,7 +38,7 @@ clean:
 compile: build
 
 run: build
-	"$(TARGET_FILE)"
+	$(TARGET_FILE)
 
 help:
 	@$(ECHO) "Usage: make all|build|clean|doc|help|lint|run|test"

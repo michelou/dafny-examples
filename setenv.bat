@@ -44,6 +44,12 @@ if not %_EXITCODE%==0 (
 call :java 17 "temurin"
 if not %_EXITCODE%==0 goto end
 
+call :msvs
+if not %_EXITCODE%==0 (
+    @rem optional
+    echo %_WARNING_LABEL% MS Visual Studio installation not found ^(optional^) 1>&2
+    set _EXITCODE=0
+)
 call :msys
 if not %_EXITCODE%==0 goto end
 
@@ -437,6 +443,14 @@ if "%__PREFIX%"=="1." ( set _JDK_VERSION=%__JAVAC_VERSION:~2,1%
 )
 goto :eof
 
+@rem output parameters: _MSVS_HOME
+:msvs
+for /f "delims=" %%i in ('vswhere ^| findstr /b installationPath') do (
+    set "__PATH=%%i"
+    set "_MSVS_HOME=!__PATH:InstallationPath: =!"
+)
+goto :eof
+
 @rem output parameters: _MSYS_HOME, _MSYS_PATH
 :msys
 set _MSYS_HOME=
@@ -589,6 +603,13 @@ if %ERRORLEVEL%==0 (
     )
     set __WHERE_ARGS=%__WHERE_ARGS% "%GOBIN%:goimports.exe"
 )
+where /q "%MSVS_HOME%\MSBuild\Current\Bin\Roslyn:csc.exe"
+if %ERRORLEVEL%==0 (
+    for /f "delims=- tokens=1,*" %%i in ('call "%MSVS_HOME%\MSBuild\Current\Bin\Roslyn\csc.exe" -version') do (
+        set "__VERSIONS_LINE3=%__VERSIONS_LINE3% csc %%i,"
+    )
+    set __WHERE_ARGS=%__WHERE_ARGS% "%MSVS_HOME%\MSBuild\Current\Bin\Roslyn:csc.exe"
+)
 where /q "%GIT_HOME%\bin:git.exe"
 if %ERRORLEVEL%==0 (
     for /f "tokens=1,2,*" %%i in ('"%GIT_HOME%\bin\git.exe" --version') do (
@@ -629,6 +650,7 @@ if %__VERBOSE%==1 (
     if defined GOPATH echo    "GOPATH=%GOPATH%" 1>&2
     if defined GOROOT echo    "GOROOT=%GOROOT%" 1>&2
     if defined JAVA_HOME echo    "JAVA_HOME=%JAVA_HOME%" 1>&2
+    if defined MSVS_HOME echo    "MSVS_HOME=%MSVS_HOME%" 1>&2
     if defined VSCODE_HOME echo    "VSCODE_HOME=%VSCODE_HOME%" 1>&2
     echo Path associations: 1>&2
     for /f "delims=" %%i in ('subst') do (
@@ -654,6 +676,7 @@ endlocal & (
         if not defined GOPATH set "GOPATH=%_GOPATH%"
         if not defined GOROOT set "GOROOT=%_GOLANG_HOME%"
         if not defined JAVA_HOME set "JAVA_HOME=%_JAVA_HOME%"
+        if not defined MSVS_HOME set "MSVS_HOME=%_MSVS_HOME%"
         if not defined VSCODE_HOME set "VSCODE_HOME=%_VSCODE_HOME%"
         @rem We prepend %_GIT_HOME%\bin to hide C:\Windows\System32\bash.exec
         if %__UPDATE_PATH%==1 set "PATH=%_GIT_HOME%\bin;%PATH%%_MSYS_PATH%%_GIT_PATH%%_VSCODE_PATH%;%~dp0bin"
