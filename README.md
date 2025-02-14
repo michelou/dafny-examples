@@ -55,6 +55,7 @@ bin\
 docs\
 examples\{<a href="./examples/README.md">README.md</a>, <a href="./examples/Competition/">Competition</a>, <a href="./examples/Fibonacci/">Fibonacci</a>, ..}
 README.md
+<a href="RESOURCES.md">RESOURCES.md</a>
 <a href="setenv.bat">setenv.bat</a>
 </pre>
 
@@ -64,6 +65,7 @@ where
 - directory [**`docs\`**](docs/) contains [Dafny] related documents.
 - directory [**`examples\`**](examples/) contains [Dafny] code examples (see [`README.md`](examples/README.md) file).
 - file **`README.md`** is the [Markdown][github_markdown] document for this page.
+- file [**`RESOURCES.md`**](RESOURCES.md) is the [Markdown][github_markdown] document presenting external resources.
 - file [**`setenv.bat`**](setenv.bat) is the batch command for setting up our environment.
 
 ## <span id="commands">Batch commands</span> [**&#x25B4;**](#top)
