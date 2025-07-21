@@ -14,6 +14,7 @@
 
 ## <span id="blogs">Blogs<span> [**&#x25B4;**](#top)
 
+- [dafny-annotator: AI-Assisted Verification for Dafny](https://dafny.org/blog/2025/06/21/dafny-annotator/) by Nada Amin and Gabriel Poesia, July 2025.
 - [Getting started with Dafny: Your first formal proof](https://www.linkedin.com/pulse/getting-started-dafny-your-first-formal-proof-alfred-white-puucc) by Alfred White, May 2024.
 - [It is just a Formality...]() by Alfred White, January 2024.
 - [Nine Rules to Formally Validate Rust Algorithms with Dafny (Part 2)](https://towardsdatascience.com/nine-rules-to-formally-validate-rust-algorithms-with-dafny-part-2-f2a279686700) by Carl M. Kaddie, Octobre 2023.
@@ -49,7 +50,7 @@
 
 ***
 
-*[mics](https://lampwww.epfl.ch/~michelou/)/February 2025* [**&#9650;**](#top)
+*[mics](https://lampwww.epfl.ch/~michelou/)/July 2025* [**&#9650;**](#top)
 <span id="bottom">&nbsp;</span>
 
 <!-- href links -->

@@ -445,7 +445,7 @@ goto :eof
 
 @rem output parameters: _MSVS_HOME
 :msvs
-for /f "delims=" %%i in ('vswhere ^| findstr /b installationPath') do (
+for /f "delims=" %%i in ('"%_ROOT_DIR%bin\vswhere" ^| findstr /b installationPath') do (
     set "__PATH=%%i"
     set "_MSVS_HOME=!__PATH:InstallationPath: =!"
 )
