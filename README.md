@@ -16,29 +16,29 @@
 
 ## <span id="proj_deps">Project dependencies</span>
 
-- [Dafny 4.10][dafny_downloads] ([*release notes*][dafny_relnotes])
-- [Git 2.50][git_downloads] ([*release notes*][git_relnotes])
+- [Dafny 4.11][dafny_downloads] ([*release notes*][dafny_relnotes])
+- [Git 2.51][git_downloads] ([*release notes*][git_relnotes])
 - [Microsoft .NET 6.0 SDK][dotnet_sdk_downloads]<sup id="anchor_01">[1](#footnote_01)</sup> ([*release notes*][dotnet_sdk_relnotes])
 
 Optionally one may also install the following software:
 
 - [ConEmu 2023][conemu_downloads] ([*release notes*][conemu_relnotes])
 - [Dafny for Visual Studio Code 3.4](https://github.com/dafny-lang/ide-vscode) ([*release notes*][ide-vscode_relnotes])
-- [Go 1.24][golang_downloads] ([*release notes*][golang_relnotes])
+- [Go 1.25][golang_downloads] ([*release notes*][golang_relnotes])
 - [Temurin OpenJDK 17 LTS][temurin_openjdk17] ([*release notes*][temurin_openjdk17_relnotes], [*bug fixes*][temurin_openjdk17_bugfixes], [Java 17 API][oracle_openjdk17_api])
-- [Visual Studio Code 1.102][vscode_downloads] ([*release notes*][vscode_relnotes])
+- [Visual Studio Code 1.104][vscode_downloads] ([*release notes*][vscode_relnotes])
 
 > **&#9755;** ***Installation policy***<br/>
 > When possible we install software from a [Zip archive][zip_archive] rather than via a [Windows installer][windows_installer]. In our case we defined **`C:\opt\`** as the installation directory for optional software tools (*in reference to* the [`/opt/`][unix_opt] directory on Unix).
 
-For instance our development environment looks as follows (*July 2025*) <sup id="anchor_02">[2](#footnote_02)</sup>:
+For instance our development environment looks as follows (*October 2025*) <sup id="anchor_02">[2](#footnote_02)</sup>:
 
 <pre style="font-size:80%;">
 C:\opt\ConEmu\                        <i>( 26 MB)</i>
 C:\opt\dafny\                         <i>(135 MB)</i>
 C:\opt\Git\                           <i>(393 MB)</i>
 C:\opt\go\                            <i>(246 MB)</i>
-C:\opt\jdk-temurin-17.0.15_7\         <i>(302 MB)</i>
+C:\opt\jdk-temurin-17.0.16_8\         <i>(302 MB)</i>
 C:\opt\VSCode\                        <i>(381 MB)</i>
 C:\Program Files\dotnet\sdk\6.0.428\  <i>(329 MB)</i>
 </pre>
@@ -77,9 +77,9 @@ We execute command [**`setenv`**](setenv.bat) once to setup our development envi
 <pre style="font-size:80%;">
 <b>&gt; <a href="setenv.bat">setenv</a></b>
 Tool versions:
-   cargo 1.84.0, rustc 1.84.0, dafny 4.10.0,
-   javac 17.0.15, code 1.102.1, go 1.24.5, goimports v0.29.0,
-   git 2.50.1, diff 3.12, bash 5.2.37(1)
+   cargo 1.88.0, rustc 1.88.0, dafny 4.11.0,
+   javac 17.0.16, code 1.104.3, go 1.25.2, goimports v0.29.0,
+   csc 4.11.0, git 2.51.0, diff 3.12, bash 5.2.37(1)
 
 <b>&gt; <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/where_1" rel="external">where</a> git sh</b>
 C:\opt\Git\bin\git.exe
@@ -97,14 +97,14 @@ Command [**`setenv`**](./setenv.bat)`-verbose` also prints :
 <pre style="font-size:80%;">
 <b>&gt; <a href="./setenv.bat">setenv</a> -verbose</b>
 Tool versions:
-   cargo 1.84.0, rustc 1.84.0, dafny 4.10.0,
-   javac 17.0.15, code 1.102.1, go 1.24.5, goimports v0.29.0,
-   git 2.50.1, diff 3.12, bash 5.2.37(1)
+   cargo 1.90.0, rustc 1.90.0, dafny 4.11.0,
+   javac 17.0.16, code 1.104.3, go 1.25.2, goimports v0.29.0,
+   csc 4.11.0, git 2.51.0, diff 3.12, bash 5.2.37(1)
 Tool paths:
    %USERPROFILE%\.cargo\bin\cargo.exe
    %USERPROFILE%\.cargo\bin\rustc.exe
    C:\opt\dafny\Dafny.exe
-   C:\opt\jdk-temurin-17.0.15_7\bin\javac.exe
+   C:\opt\jdk-temurin-17.0.16_8\bin\javac.exe
    C:\opt\VSCode\bin\code.cmd
    C:\opt\go\bin\go.exe
    %USERPROFILE%\go\bin\goimports.exe
@@ -118,7 +118,7 @@ Environment variables:
    "GOBIN=%USERPROFILE%\go\bin"
    "GOPATH=C:\Users\michelou\go"
    "GOROOT=C:\opt\Go"
-   "JAVA_HOME=C:\opt\jdk-temurin-17.0.15_7"
+   "JAVA_HOME=C:\opt\jdk-temurin-17.0.16_8"
    "VSCODE_HOME=C:\opt\VSCode"
 Path associations:
    G:\: => %USERPROFILE%\workspace-perso\dafny-examples
@@ -186,19 +186,19 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 </dd>
 <dd>
 <pre style="font-size:80%;">
-<a href="https://github.com/dafny-lang/dafny/releases" rel="external">dafny-4.10.0-x64-windows-2019.zip</a>                 <i>( 60 MB)</i>
+<a href="https://github.com/dafny-lang/dafny/releases" rel="external">dafny-4.11.0-x64-windows-2019.zip</a>                 <i>( 60 MB)</i>
 <a href="https://dotnet.microsoft.com/en-us/download/dotnet/6.0" rel="external">dotnet-sdk-6.0.428-win-x64.exe</a>                    <i>(198 MB)</i>
-<a href="https://golang.org/dl/#stable" rel="external">go1.24.5.windows-amd64.zip</a>                        <i>( 70 MB)</i>
-<a href="https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot">OpenJDK17U-jdk_x64_windows_hotspot_17.0.15_7.zip</a>  <i>(188 MB)</i>
-<a href="https://git-scm.com/download/win" rel="external">PortableGit-2.50.1-64-bit.7z.exe</a>                  <i>( 55 MB)</i>
+<a href="https://golang.org/dl/#stable" rel="external">go1.25.2.windows-amd64.zip</a>                        <i>( 70 MB)</i>
+<a href="https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot">OpenJDK17U-jdk_x64_windows_hotspot_17.0.16_8.zip</a>  <i>(188 MB)</i>
+<a href="https://git-scm.com/download/win" rel="external">PortableGit-2.51.0-64-bit.7z.exe</a>                  <i>( 55 MB)</i>
 <a href="https://www.rust-lang.org/tools/install">rust-init.exe</a>                                     <i>(  8 MB)</i>
-<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.102.1.zip</a>                      <i>(131 MB)</i>
+<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.104.3.zip</a>                      <i>(131 MB)</i>
 </pre>
 </dd></dl>
 
 ***
 
-*[mics](https://lampwww.epfl.ch/~michelou/)/July 2025* [**&#9650;**](#top)  <!-- October 2023 -->
+*[mics](https://lampwww.epfl.ch/~michelou/)/October 2025* [**&#9650;**](#top)  <!-- October 2023 -->
 <span id="bottom">&nbsp;</span>
 
 <!-- link refs -->
@@ -211,7 +211,7 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 [cpp_examples]: https://github.com/michelou/cpp-examples#top
 [dafny]: https://dafny.org/
 [dafny_downloads]: https://github.com/dafny-lang/dafny/releases
-[dafny_relnotes]: https://github.com/dafny-lang/dafny/releases/tag/v4.10.0
+[dafny_relnotes]: https://github.com/dafny-lang/dafny/releases/tag/v4.11.0
 [dart_examples]: https://github.com/michelou/dart-examples#top
 [deno_examples]: https://github.com/michelou/deno-examples#top
 [docker_examples]: https://github.com/michelou/docker-examples#top
@@ -224,7 +224,7 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 [github_markdown]: https://github.github.com/gfm/
 [golang_downloads]: https://golang.org/dl/#stable
 [golang_examples]: https://github.com/michelou/golang-examples#top
-[golang_relnotes]: https://golang.org/doc/devel/release.html#go1.24
+[golang_relnotes]: https://go.dev/doc/go1.25
 [gpcp_jvm_releases]: https://github.com/pahihu/gpcp-JVM/releases
 [graalvm_examples]: https://github.com/michelou/graalvm-examples
 [haskell_examples]: https://github.com/michelou/haskell-examples

@@ -54,7 +54,7 @@ Command [`build.bat`](./Fibonacci/build.bat) with option `-target:java` compiles
 [build] Subcommands:  clean compile run
 [build] Variables  : "DAFNY_HOME=C:\opt\dafny"
 [build] Variables  : "GIT_HOME=C:\opt\Git"
-[build] Variables  : "JAVA_HOME=C:\opt\jdk-temurin-17.0.13_11"
+[build] Variables  : "JAVA_HOME=C:\opt\jdk-temurin-17.0.16_8"
 [build] rmdir /s /q "F:\examples\Fibonacci\target"
 [build] "%DAFNY_HOME%\dafny.exe" build --target java --output  "F:\examples\Fibonacci\target\Fib.jar"  "F:\examples\Fibonacci\src\Fib.dfy"
 Dafny program verifier finished with 3 verified, 0 errors
@@ -177,7 +177,7 @@ go: downloading golang.org/x/sync v0.10.0
 
 ***
 
-*[mics](https://lampwww.epfl.ch/~michelou/)/July 2025* [**&#9650;**](#top)
+*[mics](https://lampwww.epfl.ch/~michelou/)/October 2025* [**&#9650;**](#top)
 <span id="bottom">&nbsp;</span>
 
 <!-- link refs -->
