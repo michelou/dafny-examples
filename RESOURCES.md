@@ -42,6 +42,10 @@
 
 - [Dafny VSCode](https://github.com/dafny-lang/ide-vscode) &ndash; VSCode IDE Integration for [Dafny]. 
 
+## <span id="tutorials">Tutorials</span>
+
+- [Getting Started with Dafny: A Guide](https://ece.uwaterloo.ca/~agurfink/stqam/rise4fun-Dafny/) by Arie Gurfinkel, 2020, 
+
 ## <span id="videos">Videos</span>
 
 - [Dafny, the Programming Language With Built In Formal Verification (Part 1)](https://www.youtube.com/watch?v=rxdYV-woRDo) by Jackson Kelley, October 2020.

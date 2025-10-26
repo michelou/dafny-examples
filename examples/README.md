@@ -149,18 +149,19 @@ GettingStarted: Abs(-3)=3
 <dl><dd>
 <pre style="font-size:80%;">
 <b>&gt; %GOROOT%\bin\<a href="https://pkg.go.dev/cmd/go" rel="external">go</a> install golang.org/x/tools/cmd/goimports@latest</b>
-go: downloading golang.org/x/tools v0.29.0
-go: downloading golang.org/x/mod v0.22.0
-go: downloading golang.org/x/sync v0.10.0
+go: downloading golang.org/x/tools v0.38.0
+go: downloading golang.org/x/mod v0.29.0
+go: downloading golang.org/x/sync v0.17.0
 </pre>
 
 <pre style="font-size:80%;">
 <b>&gt; %GOROOT%\bin\go.exe version -m %GOBIN%\goimports.exe</b>
-%GOBIN%\goimports.exe: go1.23.4
+%GOBIN%\goimports.exe: go1.25.3
         path    golang.org/x/tools/cmd/goimports
-        mod     golang.org/x/tools      v0.29.0 h1:Xx0h3TtM...JdhdzXE=
-        dep     golang.org/x/mod        v0.22.0 h1:D4nJWe9z...59z1pH4=
-        dep     golang.org/x/sync       v0.10.0 h1:3NQrjDix...Ta98gmQ=
+        mod     golang.org/x/tools      v0.38.0 h1:Hx2Xv8hI...ibYI/IQ=
+        dep     golang.org/x/mod        v0.29.0 h1:D4nJWe9z...59z1pH4=
+        dep     golang.org/x/sync       v0.17.0 h1:l60nONMj...k2oT9Ug=
+        dep     golang.org/x/sys        v0.37.0 h1:fdNQudmx...1goi9kQ=
         build   -buildmode=exe
         build   -compiler=gc
         build   DefaultGODEBUG=asynctimerchan=1,gotypesalias=1,[...]
