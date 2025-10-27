@@ -18,12 +18,12 @@
 
 - [Dafny 4.11][dafny_downloads] ([*release notes*][dafny_relnotes])
 - [Git 2.51][git_downloads] ([*release notes*][git_relnotes])
-- [Microsoft .NET 6.0 SDK][dotnet_sdk_downloads]<sup id="anchor_01">[1](#footnote_01)</sup> ([*release notes*][dotnet_sdk_relnotes])
+- [Microsoft .NET 9.0 SDK][dotnet_sdk_downloads]<sup id="anchor_01">[1](#footnote_01)</sup> ([*release notes*][dotnet_sdk_relnotes])
 
 Optionally one may also install the following software:
 
 - [ConEmu 2023][conemu_downloads] ([*release notes*][conemu_relnotes])
-- [Dafny for Visual Studio Code 3.4](https://github.com/dafny-lang/ide-vscode) ([*release notes*][ide-vscode_relnotes])
+- [Dafny for Visual Studio Code 3.5][dafny_vscode] ([*release notes*][ide-vscode_relnotes])
 - [Go 1.25][golang_downloads] ([*release notes*][golang_relnotes])
 - [Temurin OpenJDK 17 LTS][temurin_openjdk17] ([*release notes*][temurin_openjdk17_relnotes], [*bug fixes*][temurin_openjdk17_bugfixes], [Java 17 API][oracle_openjdk17_api])
 - [Visual Studio Code 1.105][vscode_downloads] ([*release notes*][vscode_relnotes])
@@ -127,10 +127,10 @@ Path associations:
 
 ## <span id="footnotes">Footnotes</span> [**&#x25B4;**](#top)
 
-<span id="footnote_01">[1]</span> ***Missing .NET Framework 6*** [↩](#anchor_01)
+<span id="footnote_01">[1]</span> ***Missing .NET Framework*** [↩](#anchor_01)
 
 <dl><dd>
-Dafny requires the <a href"=https://dotnet.microsoft.com/en-us/download/dotnet/6.0">Microsoft .NET Framework 6.0</a> to be installed; otherwise the following runtime error occurs :
+Dafny requires the <a href"=https://dotnet.microsoft.com/en-us/download/dotnet/6.0">Microsoft .NET Framework 6.0</a> or newer to be installed; otherwise the following runtime error occurs :
 
 <pre style="font-size:80%;">
 <b>&gt; c:\opt\dafny\Dafny.exe run src\Fib.dfy</b>
@@ -187,12 +187,12 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 <dd>
 <pre style="font-size:80%;">
 <a href="https://github.com/dafny-lang/dafny/releases" rel="external">dafny-4.11.0-x64-windows-2019.zip</a>                 <i>( 60 MB)</i>
-<a href="https://dotnet.microsoft.com/en-us/download/dotnet/6.0" rel="external">dotnet-sdk-6.0.428-win-x64.exe</a>                    <i>(198 MB)</i>
+<a href="https://dotnet.microsoft.com/en-us/download/dotnet/9.0" rel="external">dotnet-sdk-9.0.306-win-x64.exe</a>                    <i>(198 MB)</i>
 <a href="https://golang.org/dl/#stable" rel="external">go1.25.3.windows-amd64.zip</a>                        <i>( 70 MB)</i>
 <a href="https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot">OpenJDK17U-jdk_x64_windows_hotspot_17.0.16_8.zip</a>  <i>(188 MB)</i>
 <a href="https://git-scm.com/download/win" rel="external">PortableGit-2.51.1-64-bit.7z.exe</a>                  <i>( 55 MB)</i>
 <a href="https://www.rust-lang.org/tools/install">rust-init.exe</a>                                     <i>(  8 MB)</i>
-<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.104.3.zip</a>                      <i>(131 MB)</i>
+<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.105.1.zip</a>                      <i>(131 MB)</i>
 </pre>
 </dd></dl>
 
@@ -207,20 +207,22 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 [akka_examples]: https://github.com/michelou/akka-examples#top
 [cobol_examples]: https://github.com/michelou/cobol-examples#top
 [conemu_downloads]: https://github.com/Maximus5/ConEmu/releases
+[component_pascal_examples]: https://github.com/michelou/component-pascal-examples#top
 [conemu_relnotes]: https://conemu.github.io/blog/2023/07/24/Build-230724.html
 [cpp_examples]: https://github.com/michelou/cpp-examples#top
 [dafny]: https://dafny.org/
 [dafny_downloads]: https://github.com/dafny-lang/dafny/releases
 [dafny_relnotes]: https://github.com/dafny-lang/dafny/releases/tag/v4.11.0
+[dafny_vscode]: https://github.com/dafny-lang/ide-vscode
 [dart_examples]: https://github.com/michelou/dart-examples#top
 [deno_examples]: https://github.com/michelou/deno-examples#top
 [docker_examples]: https://github.com/michelou/docker-examples#top
-[dotnet_sdk_downloads]: https://dotnet.microsoft.com/en-us/download/dotnet/6.0
-[dotnet_sdk_relnotes]: https://github.com/dotnet/core/blob/main/release-notes/6.0/6.0.33/6.0.33.md
+[dotnet_sdk_downloads]: https://dotnet.microsoft.com/en-us/download/dotnet/9.0
+[dotnet_sdk_relnotes]: https://github.com/dotnet/core/tree/main/release-notes/9.0#net-9
 [flix_examples]: https://github.com/michelou/flix-examples#top
 [git_cli]: https://git-scm.com/docs/git
 [git_downloads]: https://git-scm.com/download/win
-[git_relnotes]: https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.50.1.txt
+[git_relnotes]: https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.51.1.adoc
 [github_markdown]: https://github.github.com/gfm/
 [golang_downloads]: https://golang.org/dl/#stable
 [golang_examples]: https://github.com/michelou/golang-examples#top
@@ -262,10 +264,13 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 17.0.11 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2024-April/032197.html
 17.0.12 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2024-July/035798.html
 17.0.13 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2024-October/038867.html
+17.0.14 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2024-October/038867.html
+17.0.15 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2025-April/043307.html
+17.0.16 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2025-July/045614.html
 -->
 [temurin_openjdk17]: https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot
 [temurin_openjdk17_bugfixes]: https://www.oracle.com/java/technologies/javase/17-0-4-bugfixes.html
-[temurin_openjdk17_relnotes]: https://mail.openjdk.org/pipermail/jdk-updates-dev/2024-July/035798.html
+[temurin_openjdk17_relnotes]: https://mail.openjdk.org/pipermail/jdk-updates-dev/2025-July/045614.html
 [trufflesqueak_examples]: https://github.com/michelou/trufflesqueak-examples
 [unix_opt]: https://tldp.org/LDP/Linux-Filesystem-Hierarchy/html/opt.html
 [vscode_downloads]: https://code.visualstudio.com/#alt-downloads
