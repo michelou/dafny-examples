@@ -165,10 +165,12 @@ set "_TARGET_BUILD_FILE=%_TARGET_DIR%\target-build.txt"
 if %_DEBUG%==1 (
     echo %_DEBUG_LABEL% Options    : _TARGET=%_TARGET% _VERBOSE=%_VERBOSE% 1>&2
     echo %_DEBUG_LABEL% Subcommands: %_COMMANDS% 1>&2
+    echo %_DEBUG_LABEL% Variables  : "CARGO_HOME=%CARGO_HOME%" 1>&2
     echo %_DEBUG_LABEL% Variables  : "DAFNY_HOME=%DAFNY_HOME%" 1>&2
     echo %_DEBUG_LABEL% Variables  : "GIT_HOME=%GIT_HOME%" 1>&2
     if defined GOROOT echo %_DEBUG_LABEL% Variables  : "GOROOT=%GOROOT%" 1>&2
     echo %_DEBUG_LABEL% Variables  : "JAVA_HOME=%JAVA_HOME%" 1>&2
+    if defined MSVS_HOME echo %_DEBUG_LABEL% Variables  : "MSVS_HOME=%MSVS_HOME%" 1>&2
 )
 goto :eof
 
@@ -240,6 +242,8 @@ if %__N%==0 (
 )
 set __BUILD_OPTS=--output "%_TARGET_FILE%"
 if not %_TARGET%==native set __BUILD_OPTS=--target %_TARGET% %__BUILD_OPTS%
+@rem (0,-1): Error: Unsupported Invalid Operation: The Rust compiler requires `--enforce-determinism`
+if %_TARGET%==rs set __BUILD_OPTS=--enforce-determinism %__BUILD_OPTS%
 
 set "__PATH=%PATH%"
 if %_TARGET%==cs ( set "PATH=%__PATH%;%MSVS_HOME%\MSBuild\Current\Bin\Roslyn"
@@ -252,10 +256,29 @@ if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "!_DAFNY_CMD:%DAFNY_HOME%=%%DAFNY_HOME%%!" 
 )
 call "%_DAFNY_CMD%" build %__BUILD_OPTS% %__SOURCE_FILES%
 if not %ERRORLEVEL%==0 (
-    if not %_TARGET%==native set "PATH=%__PATH%"
-    echo %_ERROR_LABEL% Failed to build Dafny program "!_TARGET_FILE:%_ROOT_DIR%=!" with target "%_TARGET%" 1>&2
-    set _EXITCODE=1
-    goto :eof
+   @rem temporary workaround (call to cargo build is missing)
+    if not %_TARGET%==rs (
+        if not %_TARGET%==native set "PATH=%__PATH%"
+        echo %_ERROR_LABEL% Failed to build Dafny program "!_TARGET_FILE:%_ROOT_DIR%=!" with target "%_TARGET%" 1>&2
+        set _EXITCODE=1
+        goto :eof
+    )
+)
+if %_TARGET%==rs (
+    set "__TARGET_DIR=%_TARGET_DIR%\%_APP_NAME%-rust\target\debug"
+    if exist "!__TARGET_DIR!\%_APP_NAME%-rust" (
+        xcopy /r /s "!__TARGET_DIR!\%_APP_NAME%-rust" "%_TARGET_DIR%\%_APP_NAME%-rust" 1>NUL
+        rmdir /q /s "!__TARGET_DIR!\%_APP_NAME%-rust" %_STDERR_REDIRECT%
+    )
+    if %_DEBUG%==1 ( set __CARGO_OPTS=
+    ) else ( set __CARGO_OPTS=--quiet
+    )
+    pushd "%_TARGET_DIR%\%_APP_NAME%-rust"
+    if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "%CARGO_HOME%\bin\cargo.exe" !__CARGO_OPTS! build 1>&2
+    ) else if %_VERBOSE%==1 ( echo Generate executable in directory "!_TARGET_DIR:%_ROOT_DIR%=!\%_APP_NAME%-rust" 1>&2
+    )
+    call "%CARGO_HOME%\bin\cargo.exe" !__CARGO_OPTS! build
+    popd
 )
 if not %_TARGET%==native set "PATH=%__PATH%"
 @rem we keep track of the choosen target to retrieve the executable path
@@ -296,7 +319,7 @@ goto :eof
 :run_java
 set "__JAR_FILE=%_TARGET_FILE%"
 
-if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "%_JAVA_CMD%" -jar "%__JAR_FILE%" 1>&2
+if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "!_JAVA_CMD:%JAVA_HOME%=%%JAVA_HOME%%!" -jar "%__JAR_FILE%" 1>&2
 ) else if %_VERBOSE%==1 ( echo Execute Dafny program "!__JAR_FILE:%_ROOT_DIR%=!" 1>&2
 )
 call "%_JAVA_CMD%" -jar "%__JAR_FILE%"
