@@ -12,12 +12,12 @@
   </tr>
 </table>
 
-[Ada][ada_examples], [Akka][akka_examples], [C++][cpp_examples], [COBOL][cobol_examples], [Component Pascal][component_pascal_examples], [Dart][dart_examples], [Deno][deno_examples], [Docker][docker_examples], [Flix][flix_examples], [Go][golang_examples], [GraalVM][graalvm_examples], [Haskell][haskell_examples], [Kafka][kafka_examples], [Kotlin][kotlin_examples], [LLVM][llvm_examples], [Modula-2][m2_examples], [Node.js][nodejs_examples], [Rust][rust_examples], [Scala&nbsp;3][scala3_examples], [Spark][spark_examples], [Spring][spring_examples], [Standard&nbsp;ML][sml_examples], [TruffleSqueak][trufflesqueak_examples], [WiX&nbsp;Toolset][wix_examples] and [Zig][zig_examples] are other topics we are continuously monitoring.
+[Ada][ada_examples], [Akka][akka_examples], [C++][cpp_examples], [COBOL][cobol_examples], [Component Pascal][component_pascal_examples], [Dart][dart_examples], [Deno][deno_examples], [Docker][docker_examples], [Flix][flix_examples], [Go][golang_examples], [GraalVM][graalvm_examples], [Haskell][haskell_examples], [Kafka][kafka_examples], [Kotlin][kotlin_examples], [LLVM][llvm_examples], [Modula-2][m2_examples], [MySQL][mysql_examples], [Node.js][nodejs_examples], [Rust][rust_examples], [Scala&nbsp;3][scala3_examples], [Spark][spark_examples], [Spring][spring_examples], [Standard&nbsp;ML][sml_examples], [TruffleSqueak][trufflesqueak_examples], [WiX&nbsp;Toolset][wix_examples] and [Zig][zig_examples] are other topics we are continuously monitoring.
 
 ## <span id="proj_deps">Project dependencies</span>
 
 - [Dafny 4.11][dafny_downloads] ([*release notes*][dafny_relnotes])
-- [Git 2.51][git_downloads] ([*release notes*][git_relnotes])
+- [Git 2.52][git_downloads] ([*release notes*][git_relnotes])
 - [Microsoft .NET 9.0 SDK][dotnet_sdk_downloads]<sup id="anchor_01">[1](#footnote_01)</sup> ([*release notes*][dotnet_sdk_relnotes])
 
 Optionally one may also install the following software:
@@ -41,6 +41,7 @@ C:\opt\go\                            <i>(246 MB)</i>
 C:\opt\jdk-temurin-17.0.17_10\        <i>(302 MB)</i>
 C:\opt\VSCode\                        <i>(381 MB)</i>
 C:\Program Files\dotnet\sdk\6.0.428\  <i>(329 MB)</i>
+C:\Program Files\dotnet\sdk\9.0.307\  <i>(381 MB)</i> <sup id="anchor_03"><a href="#footnote_03">3</sup>
 </pre>
 
 > **:mag_right:** [Git for Windows][git_downloads] provides a Bash emulation used to run [**`git`**][git_cli] from the command line (as well as over 250 Unix commands like [**`awk`**][man1_awk], [**`diff`**][man1_diff], [**`file`**][man1_file], [**`grep`**][man1_grep], [**`more`**][man1_more], [**`mv`**][man1_mv], [**`rmdir`**][man1_rmdir], [**`sed`**][man1_sed] and [**`wc`**][man1_wc]).
@@ -79,7 +80,7 @@ We execute command [**`setenv`**](setenv.bat) once to setup our development envi
 Tool versions:
    cargo 1.90.0, rustc 1.90.0, dafny 4.11.0,
    javac 17.0.17, code 1.106.0, go 1.25.4, goimports v0.29.0,
-   csc 4.14.0, git 2.51.1, diff 3.12, bash 5.2.37(1)
+   csc 4.14.0, git 2.52.0, diff 3.12, bash 5.2.37(1)
 
 <b>&gt; <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/where_1" rel="external">where</a> git sh</b>
 C:\opt\Git\bin\git.exe
@@ -99,7 +100,7 @@ Command [**`setenv`**](./setenv.bat)`-verbose` also prints :
 Tool versions:
    cargo 1.90.0, rustc 1.90.0, dafny 4.11.0,
    javac 17.0.17, code 1.106.0, go 1.25.4, goimports v0.29.0,
-   csc 4.14.0, git 2.51.2, diff 3.12, bash 5.2.37(1)
+   csc 4.14.0, git 2.52.0, diff 3.12, bash 5.2.37(1)
 Tool paths:
    %USERPROFILE%\.cargo\bin\cargo.exe
    %USERPROFILE%\.cargo\bin\rustc.exe
@@ -179,6 +180,8 @@ api-ms-win-crt-utility-l1-1-0.dll
 -->
 </dd></dl>
 
+<!--=======================================================================-->
+
 <span id="footnote_02">[2]</span> ***Downloads*** [↩](#anchor_02)
 
 <dl><dd>
@@ -190,10 +193,27 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 <a href="https://dotnet.microsoft.com/en-us/download/dotnet/9.0" rel="external">dotnet-sdk-9.0.306-win-x64.exe</a>                     <i>(198 MB)</i>
 <a href="https://golang.org/dl/#stable" rel="external">go1.25.4.windows-amd64.zip</a>                         <i>( 70 MB)</i>
 <a href="https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot">OpenJDK17U-jdk_x64_windows_hotspot_17.0.17_10.zip</a>  <i>(188 MB)</i>
-<a href="https://git-scm.com/download/win" rel="external">PortableGit-2.51.2-64-bit.7z.exe</a>                   <i>( 55 MB)</i>
+<a href="https://git-scm.com/download/win" rel="external">PortableGit-2.52.0-64-bit.7z.exe</a>                   <i>( 55 MB)</i>
 <a href="https://www.rust-lang.org/tools/install">rust-init.exe</a>                                      <i>(  8 MB)</i>
 <a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.106.0.zip</a>                       <i>(131 MB)</i>
 </pre>
+</dd></dl>
+
+<!--=======================================================================-->
+
+<span id="footnote_03">[3]</span> ***.NET and MSBuild versioning*** [↩](#anchor_03)
+
+<dl><dd>
+The version pairing between .NET and MSBuild is listed in the Microsoft documentation (see <a href="https://learn.microsoft.com/en-us/dotnet/core/porting/versioning-sdk-msbuild-vs#supported-net-versions">Supported .NET version</a>) :
+<table style="font-size:90%;">
+<tr><th>SDK version</th><th>MSBuild/MSVS version</th><th>Ship Date</th><th>Lifecycle</th></tr>
+<tr><td>10.0.1xx</td><td>18.0</td><td>Nov 2025</td><td>Nov 2028</td></tr>
+<tr><td>9.0.3xx</td><td>17.14</td><td>May 2025</td><td>Nov 2026</td></tr>
+<tr><td>9.0.2xx</td><td>17.13</td><td>Feb 2025</td><td style="color:red;">May 2025</td></tr>
+<tr><td>9.0.1xx</td><td>17.12</td><td>Nov 2024</td><td>May 2026</td></tr>
+<tr><td>8.0.4xx</td><td>17.11</td><td>Aug 2024</td><td>Nov 2026</td></tr>
+<tr><td>8.0.3xx</td><td>17.10</td><td>May 2024</td><td>Jan 2026</td></tr>
+</table>
 </dd></dl>
 
 ***
@@ -222,7 +242,7 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 [flix_examples]: https://github.com/michelou/flix-examples#top
 [git_cli]: https://git-scm.com/docs/git
 [git_downloads]: https://git-scm.com/download/win
-[git_relnotes]: https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.51.1.adoc
+[git_relnotes]: https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.52.0.adoc
 [github_markdown]: https://github.github.com/gfm/
 [golang_downloads]: https://golang.org/dl/#stable
 [golang_examples]: https://github.com/michelou/golang-examples#top
@@ -248,6 +268,7 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 [man1_wc]: https://www.linux.org/docs/man1/wc.html
 [msys2_changelog]: https://github.com/msys2/setup-msys2/blob/main/CHANGELOG.md
 [msys2_downloads]: http://repo.msys2.org/distrib/x86_64/
+[mysql_examples]: https://github.com/michelou/mysql-examples#top
 [nodejs_examples]: https://github.com/michelou/nodejs-examples#top
 [oracle_openjdk17_api]: https://docs.oracle.com/en/java/javase/17/docs/api/
 [rust_examples]: https://github.com/michelou/rust-examples#top
