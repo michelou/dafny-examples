@@ -53,6 +53,12 @@ if not %_EXITCODE%==0 (
 call :msys
 if not %_EXITCODE%==0 goto end
 
+call :python
+if not %_EXITCODE%==0 (
+    @rem optional
+    echo %_WARNING_LABEL% Python installation not found ^(optional^) 1>&2
+    set _EXITCODE=0
+)
 call :rust
 if not %_EXITCODE%==0 (
     @rem optional
@@ -485,6 +491,38 @@ if not exist "%_MSYS_HOME%\usr\bin\make.exe" (
 set "_MSYS_PATH=;%_MSYS_HOME%\usr\bin;%_MSYS_HOME%\mingw64\bin"
 goto :eof
 
+@rem output parameters: _PYTHON_HOME, _PYTHON_PATH
+:python
+set _PYTHON_HOME=
+set _PYTHON_PATH=
+
+set __PYTHON_CMD=
+for /f "delims=" %%f in ('where python.exe 2^>NUL') do set "__PYTHON_CMD=%%f"
+if defined __PYTHON_CMD (
+    for /f "delims=" %%i in ("%__PYTHON_CMD%") do set "_PYTHON_HOME=%%~dpi"
+    if %_DEBUG%==1 echo %_DEBUG_LABEL% Using path of Python executable found in PATH 1>&2
+    @rem keep _PYTHON_PATH undefined since executable already in path
+    goto :eof
+) else if defined PYTHON_HOME (
+    set "_PYTHON_HOME=%PYTHON_HOME%"
+    if %_DEBUG%==1 echo %_DEBUG_LABEL% Using environment variable PYTHON_HOME 1>&2
+) else (
+    set "__PATH=%ProgramFiles%"
+    for /f "delims=" %%f in ('dir /ad /b "!__PATH!\Python-3*" 2^>NUL') do set "_PYTHON_HOME=!__PATH!\%%f"
+    if not defined _PYTHON_HOME (
+        set __PATH=C:\opt
+        for /f "delims=" %%f in ('dir /ad /b "!__PATH!\Python-3*" 2^>NUL') do set "_PYTHON_HOME=!__PATH!\%%f"
+    )
+)
+if not exist "%_PYTHON_HOME%\python.exe" (
+    echo %_ERROR_LABEL% Python executable not found ^("%_PYTHON_HOME%"^) 1>&2
+    set _PYTHON_HOME=
+    set _EXITCODE=1
+    goto :eof
+)
+set "_PYTHON_PATH=;%_PYTHON_HOME%"
+goto :eof
+
 @rem output parameters: _CARGO_HOME, _CARGO_PATH
 :rust
 set _CARGO_HOME=
@@ -651,6 +689,7 @@ if %__VERBOSE%==1 (
     if defined GOROOT echo    "GOROOT=%GOROOT%" 1>&2
     if defined JAVA_HOME echo    "JAVA_HOME=%JAVA_HOME%" 1>&2
     if defined MSVS_HOME echo    "MSVS_HOME=%MSVS_HOME%" 1>&2
+    if defined PYTHON_HOME echo    "PYTHON_HOME=%PYTHON_HOME%" 1>&2
     if defined VSCODE_HOME echo    "VSCODE_HOME=%VSCODE_HOME%" 1>&2
     echo Path associations: 1>&2
     for /f "delims=" %%i in ('subst') do (
@@ -677,6 +716,7 @@ endlocal & (
         if not defined GOROOT set "GOROOT=%_GOLANG_HOME%"
         if not defined JAVA_HOME set "JAVA_HOME=%_JAVA_HOME%"
         if not defined MSVS_HOME set "MSVS_HOME=%_MSVS_HOME%"
+        if not defined PYTHON_HOME set "PYTHON_HOME=%_PYTHON_HOME%"
         if not defined VSCODE_HOME set "VSCODE_HOME=%_VSCODE_HOME%"
         @rem We prepend %_GIT_HOME%\bin to hide C:\Windows\System32\bash.exec
         if %__UPDATE_PATH%==1 set "PATH=%_GIT_HOME%\bin;%PATH%%_MSYS_PATH%%_GIT_PATH%%_VSCODE_PATH%;%~dp0bin"

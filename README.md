@@ -20,18 +20,20 @@
 - [Git 2.52][git_downloads] ([*release notes*][git_relnotes])
 - [Microsoft .NET 9.0 SDK][dotnet_sdk_downloads]<sup id="anchor_01">[1](#footnote_01)</sup> ([*release notes*][dotnet_sdk_relnotes])
 
-Optionally one may also install the following software:
+Optionally one may also install the following software <sup id="anchor_02">[2](#footnote_02)</sup> :
 
 - [ConEmu 2023][conemu_downloads] ([*release notes*][conemu_relnotes])
 - [Dafny for Visual Studio Code 3.5][dafny_vscode] ([*release notes*][ide-vscode_relnotes])
 - [Go 1.25][golang_downloads] ([*release notes*][golang_relnotes])
+- [Python 3.11][python_downloads] ([*changelog*][python_changelog])
+- [Rust 1.91][rust_downloads] ([*release notes*][rust_relnotes])
 - [Temurin OpenJDK 17 LTS][temurin_openjdk17] ([*release notes*][temurin_openjdk17_relnotes], [*bug fixes*][temurin_openjdk17_bugfixes], [Java 17 API][oracle_openjdk17_api])
 - [Visual Studio Code 1.106][vscode_downloads] ([*release notes*][vscode_relnotes])
 
 > **&#9755;** ***Installation policy***<br/>
 > When possible we install software from a [Zip archive][zip_archive] rather than via a [Windows installer][windows_installer]. In our case we defined **`C:\opt\`** as the installation directory for optional software tools (*in reference to* the [`/opt/`][unix_opt] directory on Unix).
 
-For instance our development environment looks as follows (*November 2025*) <sup id="anchor_02">[2](#footnote_02)</sup>:
+For instance our development environment looks as follows (*December 2025*) <sup id="anchor_03">[3](#footnote_03)</sup>:
 
 <pre style="font-size:80%;">
 C:\opt\ConEmu\                        <i>( 26 MB)</i>
@@ -39,9 +41,12 @@ C:\opt\dafny\                         <i>(135 MB)</i>
 C:\opt\Git\                           <i>(393 MB)</i>
 C:\opt\go\                            <i>(246 MB)</i>
 C:\opt\jdk-temurin-17.0.17_10\        <i>(302 MB)</i>
+C:\opt\Python-3.11.1\                 <i>( 77 MB)</i>
 C:\opt\VSCode\                        <i>(381 MB)</i>
 C:\Program Files\dotnet\sdk\6.0.428\  <i>(329 MB)</i>
-C:\Program Files\dotnet\sdk\9.0.307\  <i>(381 MB)</i> <sup id="anchor_03"><a href="#footnote_03">3</sup>
+C:\Program Files\dotnet\sdk\9.0.307\  <i>(381 MB)</i> <sup id="anchor_04"><a href="#footnote_04">4</sup>
+<a href="https://en.wikipedia.org/wiki/Environment_variable#Default_values">%USERPROFILE%</a>\.cargo\                 <i>(100 MB)</i>
+<a href="https://en.wikipedia.org/wiki/Environment_variable#Default_values">%USERPROFILE%</a>\.rustup\                <i>(593 MB, installed toolchains and configuration options)</i>
 </pre>
 
 > **:mag_right:** [Git for Windows][git_downloads] provides a Bash emulation used to run [**`git`**][git_cli] from the command line (as well as over 250 Unix commands like [**`awk`**][man1_awk], [**`diff`**][man1_diff], [**`file`**][man1_file], [**`grep`**][man1_grep], [**`more`**][man1_more], [**`mv`**][man1_mv], [**`rmdir`**][man1_rmdir], [**`sed`**][man1_sed] and [**`wc`**][man1_wc]).
@@ -78,8 +83,8 @@ We execute command [**`setenv`**](setenv.bat) once to setup our development envi
 <pre style="font-size:80%;">
 <b>&gt; <a href="setenv.bat">setenv</a></b>
 Tool versions:
-   cargo 1.90.0, rustc 1.90.0, dafny 4.11.0,
-   javac 17.0.17, code 1.106.0, go 1.25.4, goimports v0.29.0,
+   cargo 1.19.1, rustc 1.19.1, dafny 4.11.0,
+   javac 17.0.17, code 1.106.3, go 1.25.4, goimports v0.29.0,
    csc 4.14.0, git 2.52.0, diff 3.12, bash 5.2.37(1)
 
 <b>&gt; <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/where_1" rel="external">where</a> git sh</b>
@@ -98,8 +103,8 @@ Command [**`setenv`**](./setenv.bat)`-verbose` also prints :
 <pre style="font-size:80%;">
 <b>&gt; <a href="./setenv.bat">setenv</a> -verbose</b>
 Tool versions:
-   cargo 1.90.0, rustc 1.90.0, dafny 4.11.0,
-   javac 17.0.17, code 1.106.0, go 1.25.4, goimports v0.29.0,
+   cargo 1.19.1, rustc 1.19.1, dafny 4.11.0,
+   javac 17.0.17, code 1.106.3, go 1.25.4, goimports v0.29.0,
    csc 4.14.0, git 2.52.0, diff 3.12, bash 5.2.37(1)
 Tool paths:
    %USERPROFILE%\.cargo\bin\cargo.exe
@@ -182,7 +187,15 @@ api-ms-win-crt-utility-l1-1-0.dll
 
 <!--=======================================================================-->
 
-<span id="footnote_02">[2]</span> ***Downloads*** [↩](#anchor_02)
+<span id="footnote_02">[2]</span> ***Supported target languages*** [↩](#anchor_02)
+
+<dl><dd>
+The <a href="https://dafny.org/dafny/DafnyRef/DafnyRef#sec-dafny-translate">current set</a> of supported target languages is C#, Java, JavaScript, Python, Go and C++ (<a href="https://dafny.org/dafny/DafnyRef/DafnyRef#sec-supported-features-by-target-language" rel="external">supported features by target language</a>).
+</dd></dl>
+
+<!--=======================================================================-->
+
+<span id="footnote_03">[3]</span> ***Downloads*** [↩](#anchor_03)
 
 <dl><dd>
 In our case we downloaded the following installation files (<a href="#proj_deps">see section 1</a>):
@@ -194,14 +207,15 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 <a href="https://golang.org/dl/#stable" rel="external">go1.25.4.windows-amd64.zip</a>                         <i>( 70 MB)</i>
 <a href="https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot">OpenJDK17U-jdk_x64_windows_hotspot_17.0.17_10.zip</a>  <i>(188 MB)</i>
 <a href="https://git-scm.com/download/win" rel="external">PortableGit-2.52.0-64-bit.7z.exe</a>                   <i>( 55 MB)</i>
+<a href="https://www.python.org/downloads/">python-3.11.1-amd64.exe</a>                            <i>( 26 MB)</i>
 <a href="https://www.rust-lang.org/tools/install">rust-init.exe</a>                                      <i>(  8 MB)</i>
-<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.106.0.zip</a>                       <i>(131 MB)</i>
+<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.106.3.zip</a>                       <i>(131 MB)</i>
 </pre>
 </dd></dl>
 
 <!--=======================================================================-->
 
-<span id="footnote_03">[3]</span> ***.NET and MSBuild versioning*** [↩](#anchor_03)
+<span id="footnote_04">[4]</span> ***.NET and MSBuild versioning*** [↩](#anchor_04)
 
 <dl><dd>
 The version pairing between .NET and MSBuild is listed in the Microsoft documentation (see <a href="https://learn.microsoft.com/en-us/dotnet/core/porting/versioning-sdk-msbuild-vs#supported-net-versions">Supported .NET version</a>) :
@@ -218,7 +232,7 @@ The version pairing between .NET and MSBuild is listed in the Microsoft document
 
 ***
 
-*[mics](https://lampwww.epfl.ch/~michelou/)/November 2025* [**&#9650;**](#top)  <!-- October 2023 -->
+*[mics](https://lampwww.epfl.ch/~michelou/)/December 2025* [**&#9650;**](#top)  <!-- October 2023 -->
 <span id="bottom">&nbsp;</span>
 
 <!-- link refs -->
@@ -271,7 +285,12 @@ The version pairing between .NET and MSBuild is listed in the Microsoft document
 [mysql_examples]: https://github.com/michelou/mysql-examples#top
 [nodejs_examples]: https://github.com/michelou/nodejs-examples#top
 [oracle_openjdk17_api]: https://docs.oracle.com/en/java/javase/17/docs/api/
+[python_changelog]: https://docs.python.org/release/3.11.0/whatsnew/changelog.html
+[python_downloads]: https://www.python.org/downloads/
+[rust_downloads]: https://forge.rust-lang.org/infra/other-installation-methods.html#standalone-installers
 [rust_examples]: https://github.com/michelou/rust-examples#top
+[rust_lang]: https://www.rust-lang.org/
+[rust_relnotes]: https://github.com/rust-lang/rust/blob/master/RELEASES.md
 [scala3_examples]: https://github.com/michelou/dotty-examples#top
 [sh_cli]: https://man7.org/linux/man-pages/man1/sh.1p.html
 [sml_examples]: https://github.com/michelou/sml-examples#top
@@ -288,6 +307,7 @@ The version pairing between .NET and MSBuild is listed in the Microsoft document
 17.0.14 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2024-October/038867.html
 17.0.15 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2025-April/043307.html
 17.0.16 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2025-July/045614.html
+17.0.17 -> 
 -->
 [temurin_openjdk17]: https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot
 [temurin_openjdk17_bugfixes]: https://www.oracle.com/java/technologies/javase/17-0-4-bugfixes.html

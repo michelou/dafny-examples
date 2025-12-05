@@ -54,6 +54,10 @@ set _JAVA_CMD=
 if exist "%JAVA_HOME%\bin\java.exe" (
     set "_JAVA_CMD=%JAVA_HOME%\bin\java.exe"
 )
+set _PYINSTALLER_CMD=
+if exist "%PYTHON_HOME%\Scripts\pyinstaller.exe" (
+    set "_PYINSTALLER_CMD=%PYTHON_HOME%\Scripts\pyinstaller.exe"
+)
 goto :eof
 
 :env_colors
@@ -126,6 +130,7 @@ if "%__ARG:~0,1%"=="-" (
     ) else if "%__ARG%"=="-target:go" ( set _TARGET=go
     ) else if "%__ARG%"=="-target:java" ( set _TARGET=java
     ) else if "%__ARG%"=="-target:native" ( set _TARGET=native
+    ) else if "%__ARG%"=="-target:py" ( set _TARGET=py
     ) else if "%__ARG%"=="-target:rs" ( set _TARGET=rs
     ) else if "%__ARG%"=="-verbose" ( set _VERBOSE=1
     ) else (
@@ -206,6 +211,8 @@ goto :eof
 
 :clean
 call :rmdir "%_TARGET_DIR%"
+call :rmdir "%_ROOT_DIR%build"
+call :rmdir "%_ROOT_DIR%dist"
 goto :eof
 
 @rem input parameter: %1=directory path
@@ -244,7 +251,8 @@ if not %_TARGET%==native set __BUILD_OPTS=--target %_TARGET% %__BUILD_OPTS%
 set "__PATH=%PATH%"
 if %_TARGET%==cs ( set "PATH=%__PATH%;%MSVS_HOME%\MSBuild\Current\Bin\Roslyn"
 ) else if %_TARGET%==go ( set "PATH=%__PATH%;%GOROOT%\bin;%GOBIN%"
-) else if %_TARGET%==java set "PATH=%__PATH%;%JAVA_HOME%\bin"
+) else if %_TARGET%==java ( set "PATH=%__PATH%;%JAVA_HOME%\bin"
+) else if %_TARGET%==py ( set "PATH=%__PATH%;%PYTHON_HOME%"
 ) else if %_TARGET%==rs ( set "PATH=%__PATH%;%CARGO_HOME%\bin"
 )
 if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "!_DAFNY_CMD:%DAFNY_HOME%=%%DAFNY_HOME%%!" build %__BUILD_OPTS% %__SOURCE_FILES% 1>&2
@@ -256,6 +264,20 @@ if not %ERRORLEVEL%==0 (
     echo %_ERROR_LABEL% Failed to build Dafny program "!_TARGET_FILE:%_ROOT_DIR%=!" with target "%_TARGET%" 1>&2
     set _EXITCODE=1
     goto :eof
+)
+if %_TARGET%==py (
+    set __PY_OPTS=--name "%_APP_NAME%" --noconsole --noconfirm --specpath "%_TARGET_DIR%"
+    if %_DEBUG%==1 ( echo %_DEBUG_LABEL% "%_PYINSTALLER_CMD%" !__PY_OPTS! "%_TARGET_DIR%\%_APP_NAME%-py\__main__.py" 1>&2
+    ) else if %_VERBOSE%==1 ( echo Generate executable "%_APP_NAME%.exe" 1>&2
+    )
+    call "%_PYINSTALLER_CMD%" !__PY_OPTS! "%_TARGET_DIR%\%_APP_NAME%-py\__main__.py"
+    if not !ERRORLEVEL!==0 (
+        set "PATH=%__PATH%"
+        echo %_ERROR_LABEL% Failed to generate executable "%_APP_NAME%.exe" 1>&2
+        set _EXITCODE=1
+        goto :eof
+    )
+    copy "%_ROOT_DIR%dist\%_APP_NAME%\%_APP_NAME%.exe" "%_TARGET_DIR%" 1>NUL
 )
 if not %_TARGET%==native set "PATH=%__PATH%"
 @rem we keep track of the choosen target to retrieve the executable path

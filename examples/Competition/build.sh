@@ -124,7 +124,7 @@ compile() {
 
     local source_files=
     local n=0
-    for f in $(find "$SOURCE_DIR/" -type f -name "*.dfy" 2>/dev/null); do
+    for f in $($FIND_CMD "$SOURCE_DIR/" -type f -name "*.dfy" 2>/dev/null); do
         source_files="$source_files\"$f\" "
         n=$((n + 1))
     done
@@ -164,7 +164,7 @@ action_required() {
     local search_path=$2
     local search_pattern=$3
     local latest=
-    for f in $(find $search_path -name $search_pattern 2>/dev/null); do
+    for f in $($FIND_CMD $search_path -name $search_pattern 2>/dev/null); do
         [[ $f -nt $latest ]] && latest=$f
     done
     if [[ -z "$latest" ]]; then
@@ -260,8 +260,10 @@ if [[ $(($cygwin + $mingw + $msys)) -gt 0 ]]; then
     [[ -n "$JAVA_HOME" ]] && JAVA_HOME="$(mixed_path $JAVA_HOME)"
     [[ -n "$MSVS_HOME" ]] && MSVS_HOME="$(mixed_path $MSVS_HOME)"
     DIFF_CMD="$GIT_HOME/usr/bin/diff.exe"
+    FIND_CMD="$GIT_HOME/usr/bin/find.exe"
 else
     DIFF_CMD="$(which diff)"
+    FIND_CMD="$(which find)"
 fi
 if [[ ! -x "$DAFNY_HOME/Dafny.exe" ]]; then
     error "Dafny installation not found"
