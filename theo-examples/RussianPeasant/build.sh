@@ -54,7 +54,6 @@ args() {
         ## options
         -debug)         DEBUG=1 ;;
         -help)          HELP=1 ;;
-        -target:cs)     TARGET=cs ;;
         -target:go)     TARGET=native ;;
         -target:java)   TARGET=java ;;
         -target:native) TARGET=native ;;
@@ -100,7 +99,7 @@ Usage: $BASENAME { <option> | <subcommand> }
     run             execute the generated program "${TARGET_FILE/$ROOT_DIR\//}"
 
   Target names:
-    native (default), cs (C#), go, java, rs
+    native (default), go, java, rs
 EOS
 }
 
@@ -124,7 +123,7 @@ compile() {
 
     local source_files=
     local n=0
-    for f in $($FIND_CMD "$SOURCE_DIR/" -type f -name "*.dfy" 2>/dev/null); do
+    for f in $(find "$SOURCE_DIR/" -type f -name "*.dfy" 2>/dev/null); do
         source_files="$source_files\"$f\" "
         n=$((n + 1))
     done
@@ -139,7 +138,6 @@ compile() {
 
     local path="$PATH"
     case "$TARGET" in
-        cs)   export PATH="$MSVS_HOME/MSBuild/Current/Bin/Roslyn:$PATH" ;;
         go)   export PATH="$GOROOT/bin:$GOBIN:$PATH" ;;
         java) export PATH="$JAVA_HOME/bin:$PATH" ;;
         rs)   export PATH="$CARGO_HOME/bin:$PATH" ;;
@@ -148,12 +146,12 @@ compile() {
     if [[ $DEBUG -eq 1 ]]; then
         debug "$DAFNY_CMD build $build_opts $source_files"
     elif [[ $VERBOSE -eq 1 ]]; then
-        echo "Compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\" with target \"$TARGET\"" 1>&2
+        echo "Compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\" with \"$TARGET\" target" 1>&2
     fi
     eval "\"$DAFNY_CMD\" build $build_opts $source_files"
     if [[ $? -ne 0 ]]; then
         export PATH="$path"
-        error "Failed to compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\" with target \"$TARGET\""
+        error "Failed to compile $n_files to directory \"${TARGET_DIR/$ROOT_DIR\//}\" with \"$TARGET\" target"
         cleanup 1
     fi
     export PATH="$path"
@@ -164,7 +162,7 @@ action_required() {
     local search_path=$2
     local search_pattern=$3
     local latest=
-    for f in $($FIND_CMD $search_path -name $search_pattern 2>/dev/null); do
+    for f in $(find $search_path -name $search_pattern 2>/dev/null); do
         [[ $f -nt $latest ]] && latest=$f
     done
     if [[ -z "$latest" ]]; then
@@ -258,12 +256,9 @@ if [[ $(($cygwin + $mingw + $msys)) -gt 0 ]]; then
     [[ -n "$DAFNY_HOME" ]] && DAFNY_HOME="$(mixed_path $DAFNY_HOME)"
     [[ -n "$GIT_HOME" ]] && GIT_HOME="$(mixed_path $GIT_HOME)"
     [[ -n "$JAVA_HOME" ]] && JAVA_HOME="$(mixed_path $JAVA_HOME)"
-    [[ -n "$MSVS_HOME" ]] && MSVS_HOME="$(mixed_path $MSVS_HOME)"
     DIFF_CMD="$GIT_HOME/usr/bin/diff.exe"
-    FIND_CMD="$GIT_HOME/usr/bin/find.exe"
 else
     DIFF_CMD="$(which diff)"
-    FIND_CMD="$(which find)"
 fi
 if [[ ! -x "$DAFNY_HOME/Dafny.exe" ]]; then
     error "Dafny installation not found"
@@ -275,13 +270,12 @@ PROJECT_NAME="$(basename $ROOT_DIR)"
 PROJECT_URL="github.com/$USER/dafny-examples"
 PROJECT_VERSION="1.0-SNAPSHOT"
 
-APP_NAME="Competition"
+APP_NAME="SelectionSort"
 
 args "$@"
 [[ $EXITCODE -eq 0 ]] || cleanup 1
 
 case "$TARGET" in
-    cs)     TARGET_EXT=.exe ;;
     native) TARGET_EXT=.exe ;;
     go)     TARGET_EXT=.exe ;;
     java)   TARGET_EXT=.jar ;;

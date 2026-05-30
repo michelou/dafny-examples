@@ -5,6 +5,8 @@
 ##
 ##############################################################################
 
+DEBUG ?= 0
+
 TARGET ?= native
 
 include ../Makefile.inc
@@ -18,7 +20,7 @@ TARGET_DOCS_DIR = $(TARGET_DIR)/docs
 ##############################################################################
 ## main rules
 
-SOURCES = $(wildcard $(SOURCE_DIR)/Fib.dfy)
+SOURCES = $(wildcard $(SOURCE_DIR)/main/dafny/$(PROJECT_NAME).dfy)
 TARGET_FILE = $(TARGET_DIR)/$(PROJECT_NAME)$(TARGET_EXT)
 
 BUILD_OPTS = $(if $(filter native,$(TARGET)),,--target $(TARGET)) --output "$(TARGET_FILE)"
@@ -28,9 +30,10 @@ all: build
 build: $(TARGET_FILE)
 
 $(TARGET_FILE): $(SOURCES)
-	@$(ECHO) "BUILD_OPTS=$(BUILD_OPTS)"
+	@#[ $(DEBUG) -eq 1 ] && $(ECHO) "BUILD_OPTS=$(BUILD_OPTS)"
 	[ -d "$(TARGET_DIR)" ] || "$(MKDIR)" -p "$(TARGET_DIR)"
-	PATH="$(PATH):$(GOROOT)/bin:$(GOBIN)" && \
+	@PATH="$(PATH):$(GOROOT)/bin:$(GOBIN)" && \
+	$(ECHO) "\"$(DAFNY)\" build $(BUILD_OPTS) $(SOURCES)" && \
 	"$(DAFNY)" build $(BUILD_OPTS) $(SOURCES)
 
 clean:
@@ -73,4 +76,4 @@ lint:
 .PHONY: all build clean doc help lint run
 
 .SUFFIXES:
-.SUFFIXES: .exe .rs
+.SUFFIXES: .cs .csproj .json .dll .exe .pdb .rs

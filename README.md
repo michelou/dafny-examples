@@ -17,30 +17,30 @@
 ## <span id="proj_deps">Project dependencies</span>
 
 - [Dafny 4.11][dafny_downloads] ([*release notes*][dafny_relnotes])
-- [Git 2.52][git_downloads] ([*release notes*][git_relnotes])
+- [Git 2.54][git_downloads] ([*release notes*][git_relnotes])
 - [Microsoft .NET 9.0 SDK][dotnet_sdk_downloads]<sup id="anchor_01">[1](#footnote_01)</sup> ([*release notes*][dotnet_sdk_relnotes])
 
 Optionally one may also install the following software <sup id="anchor_02">[2](#footnote_02)</sup> :
 
 - [ConEmu 2023][conemu_downloads] ([*release notes*][conemu_relnotes])
 - [Dafny for Visual Studio Code 3.5][dafny_vscode] ([*release notes*][ide-vscode_relnotes])
-- [Go 1.25][golang_downloads] ([*release notes*][golang_relnotes])
+- [Go 1.6][golang_downloads] ([*release notes*][golang_relnotes])
 - [Python 3.11][python_downloads] ([*changelog*][python_changelog])
-- [Rust 1.91][rust_downloads] ([*release notes*][rust_relnotes])
+- [Rust 1.96][rust_downloads] ([*release notes*][rust_relnotes])
 - [Temurin OpenJDK 17 LTS][temurin_openjdk17] ([*release notes*][temurin_openjdk17_relnotes], [*bug fixes*][temurin_openjdk17_bugfixes], [Java 17 API][oracle_openjdk17_api])
-- [Visual Studio Code 1.106][vscode_downloads] ([*release notes*][vscode_relnotes])
+- [Visual Studio Code 1.120][vscode_downloads] ([*release notes*][vscode_relnotes])
 
 > **&#9755;** ***Installation policy***<br/>
 > When possible we install software from a [Zip archive][zip_archive] rather than via a [Windows installer][windows_installer]. In our case we defined **`C:\opt\`** as the installation directory for optional software tools (*in reference to* the [`/opt/`][unix_opt] directory on Unix).
 
-For instance our development environment looks as follows (*December 2025*) <sup id="anchor_03">[3](#footnote_03)</sup>:
+For instance our development environment looks as follows (*June 2026*) <sup id="anchor_03">[3](#footnote_03)</sup>:
 
 <pre style="font-size:80%;">
 C:\opt\ConEmu\                        <i>( 26 MB)</i>
 C:\opt\dafny\                         <i>(135 MB)</i>
 C:\opt\Git\                           <i>(393 MB)</i>
 C:\opt\go\                            <i>(246 MB)</i>
-C:\opt\jdk-temurin-17.0.17_10\        <i>(302 MB)</i>
+C:\opt\jdk-temurin-17.0.19_10\        <i>(302 MB)</i>
 C:\opt\Python-3.11.1\                 <i>( 77 MB)</i>
 C:\opt\VSCode\                        <i>(381 MB)</i>
 C:\Program Files\dotnet\sdk\6.0.428\  <i>(329 MB)</i>
@@ -60,6 +60,7 @@ This project is organized as follows:
 bin\
 docs\
 examples\{<a href="./examples/README.md">README.md</a>, <a href="./examples/Competition/">Competition</a>, <a href="./examples/Fibonacci/">Fibonacci</a>, ..}
+theo-examples\{<a href="./theo-examples/README.md">README.md</a>, <a href="./theo-examples/SelectionSort/">SelectionSort</a>, ..}
 README.md
 <a href="RESOURCES.md">RESOURCES.md</a>
 <a href="setenv.bat">setenv.bat</a>
@@ -70,6 +71,7 @@ where
 - directory [**`bin\`**](bin/) contains utility tools.
 - directory [**`docs\`**](docs/) contains [Dafny] related documents.
 - directory [**`examples\`**](examples/) contains [Dafny] code examples (see [`README.md`](examples/README.md) file).
+- directory [**`theo-examples\`**](theo-examples/) contains [Dafny] code examples (see [`README.md`](theo-examples/README.md) file).
 - file **`README.md`** is the [Markdown][github_markdown] document for this page.
 - file [**`RESOURCES.md`**](RESOURCES.md) is the [Markdown][github_markdown] document presenting external resources.
 - file [**`setenv.bat`**](setenv.bat) is the batch command for setting up our environment.
@@ -83,9 +85,9 @@ We execute command [**`setenv`**](setenv.bat) once to setup our development envi
 <pre style="font-size:80%;">
 <b>&gt; <a href="setenv.bat">setenv</a></b>
 Tool versions:
-   cargo 1.19.1, rustc 1.19.1, dafny 4.11.0,
-   javac 17.0.17, code 1.106.3, go 1.25.4, goimports v0.29.0,
-   csc 4.14.0, git 2.52.0, diff 3.12, bash 5.2.37(1)
+   cargo 1.96.0, rustc 1.96.0, dafny 4.11.0,
+   javac 17.0.19, code 1.120.0, go 1.26.3, goimports v0.38.0,
+   csc 4.14.0, git 2.54.0, diff 3.12, bash 5.3.9(1)
 
 <b>&gt; <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/where_1" rel="external">where</a> git sh</b>
 C:\opt\Git\bin\git.exe
@@ -103,14 +105,14 @@ Command [**`setenv`**](./setenv.bat)`-verbose` also prints :
 <pre style="font-size:80%;">
 <b>&gt; <a href="./setenv.bat">setenv</a> -verbose</b>
 Tool versions:
-   cargo 1.19.1, rustc 1.19.1, dafny 4.11.0,
-   javac 17.0.17, code 1.106.3, go 1.25.4, goimports v0.29.0,
-   csc 4.14.0, git 2.52.0, diff 3.12, bash 5.2.37(1)
+   cargo 1.96.0, rustc 1.96.0, dafny 4.11.0,
+   javac 17.0.19, code 1.120.0, go 1.26.3, goimports v0.38.0,
+   csc 4.14.0, git 2.54.0, diff 3.12, bash 5.3.9(1)
 Tool paths:
    %USERPROFILE%\.cargo\bin\cargo.exe
    %USERPROFILE%\.cargo\bin\rustc.exe
    C:\opt\dafny\Dafny.exe
-   C:\opt\jdk-temurin-17.0.17_10\bin\javac.exe
+   C:\opt\jdk-temurin-17.0.19_10\bin\javac.exe
    C:\opt\VSCode\bin\code.cmd
    C:\opt\go\bin\go.exe
    %USERPROFILE%\go\bin\goimports.exe
@@ -124,7 +126,7 @@ Environment variables:
    "GOBIN=%USERPROFILE%\go\bin"
    "GOPATH=C:\Users\michelou\go"
    "GOROOT=C:\opt\Go"
-   "JAVA_HOME=C:\opt\jdk-temurin-17.0.17_10"
+   "JAVA_HOME=C:\opt\jdk-temurin-17.0.19_10"
    "VSCODE_HOME=C:\opt\VSCode"
 Path associations:
    G:\: => %USERPROFILE%\workspace-perso\dafny-examples
@@ -204,12 +206,12 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 <pre style="font-size:80%;">
 <a href="https://github.com/dafny-lang/dafny/releases" rel="external">dafny-4.11.0-x64-windows-2019.zip</a>                  <i>( 60 MB)</i>
 <a href="https://dotnet.microsoft.com/en-us/download/dotnet/9.0" rel="external">dotnet-sdk-9.0.306-win-x64.exe</a>                     <i>(198 MB)</i>
-<a href="https://golang.org/dl/#stable" rel="external">go1.25.4.windows-amd64.zip</a>                         <i>( 70 MB)</i>
-<a href="https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot">OpenJDK17U-jdk_x64_windows_hotspot_17.0.17_10.zip</a>  <i>(188 MB)</i>
-<a href="https://git-scm.com/download/win" rel="external">PortableGit-2.52.0-64-bit.7z.exe</a>                   <i>( 55 MB)</i>
+<a href="https://golang.org/dl/#stable" rel="external">go1.26.3.windows-amd64.zip</a>                         <i>( 70 MB)</i>
+<a href="https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot">OpenJDK17U-jdk_x64_windows_hotspot_17.0.19_10.zip</a>  <i>(188 MB)</i>
+<a href="https://git-scm.com/download/win" rel="external">PortableGit-2.54.0-64-bit.7z.exe</a>                   <i>( 55 MB)</i>
 <a href="https://www.python.org/downloads/">python-3.11.1-amd64.exe</a>                            <i>( 26 MB)</i>
 <a href="https://www.rust-lang.org/tools/install">rust-init.exe</a>                                      <i>(  8 MB)</i>
-<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.106.3.zip</a>                       <i>(131 MB)</i>
+<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.120.0.zip</a>                       <i>(131 MB)</i>
 </pre>
 </dd></dl>
 
@@ -218,9 +220,10 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 <span id="footnote_04">[4]</span> ***.NET and MSBuild versioning*** [↩](#anchor_04)
 
 <dl><dd>
-The version pairing between .NET and MSBuild is listed in the Microsoft documentation (see <a href="https://learn.microsoft.com/en-us/dotnet/core/porting/versioning-sdk-msbuild-vs#supported-net-versions">Supported .NET version</a>) :
+The version pairing between .NET and [MSBuild] is listed in the Microsoft documentation (see <a href="https://learn.microsoft.com/en-us/dotnet/core/porting/versioning-sdk-msbuild-vs#supported-net-versions">Supported .NET version</a>) :
 <table style="font-size:90%;">
 <tr><th>SDK version</th><th>MSBuild/MSVS version</th><th>Ship Date</th><th>Lifecycle</th></tr>
+<tr><td>10.0.2xx</td><td>18.4</td><td>Mar 2025</td><td>May 2026</td></tr>
 <tr><td>10.0.1xx</td><td>18.0</td><td>Nov 2025</td><td>Nov 2028</td></tr>
 <tr><td>9.0.3xx</td><td>17.14</td><td>May 2025</td><td>Nov 2026</td></tr>
 <tr><td>9.0.2xx</td><td>17.13</td><td>Feb 2025</td><td style="color:red;">May 2025</td></tr>
@@ -232,7 +235,7 @@ The version pairing between .NET and MSBuild is listed in the Microsoft document
 
 ***
 
-*[mics](https://lampwww.epfl.ch/~michelou/)/December 2025* [**&#9650;**](#top)  <!-- October 2023 -->
+*[mics](https://lampwww.epfl.ch/~michelou/)/June 2026* [**&#9650;**](#top)  <!-- October 2023 -->
 <span id="bottom">&nbsp;</span>
 
 <!-- link refs -->
@@ -256,11 +259,11 @@ The version pairing between .NET and MSBuild is listed in the Microsoft document
 [flix_examples]: https://github.com/michelou/flix-examples#top
 [git_cli]: https://git-scm.com/docs/git
 [git_downloads]: https://git-scm.com/download/win
-[git_relnotes]: https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.52.0.adoc
+[git_relnotes]: https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.54.0.adoc
 [github_markdown]: https://github.github.com/gfm/
 [golang_downloads]: https://golang.org/dl/#stable
 [golang_examples]: https://github.com/michelou/golang-examples#top
-[golang_relnotes]: https://go.dev/doc/go1.25
+[golang_relnotes]: https://go.dev/doc/go1.26
 [gpcp_jvm_releases]: https://github.com/pahihu/gpcp-JVM/releases
 [graalvm_examples]: https://github.com/michelou/graalvm-examples
 [haskell_examples]: https://github.com/michelou/haskell-examples
@@ -280,6 +283,7 @@ The version pairing between .NET and MSBuild is listed in the Microsoft document
 [man1_rmdir]: https://www.linux.org/docs/man1/rmdir.html
 [man1_sed]: https://www.linux.org/docs/man1/sed.html
 [man1_wc]: https://www.linux.org/docs/man1/wc.html
+[msbuild]: https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference?view=visualstudio
 [msys2_changelog]: https://github.com/msys2/setup-msys2/blob/main/CHANGELOG.md
 [msys2_downloads]: http://repo.msys2.org/distrib/x86_64/
 [mysql_examples]: https://github.com/michelou/mysql-examples#top
@@ -307,7 +311,9 @@ The version pairing between .NET and MSBuild is listed in the Microsoft document
 17.0.14 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2024-October/038867.html
 17.0.15 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2025-April/043307.html
 17.0.16 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2025-July/045614.html
-17.0.17 -> 
+17.0.17 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2025-October/049112.html
+17.0.18 -> https://mail.openjdk.org/pipermail/jdk-updates-dev/2026-January/051740.html
+17.0.19 -> https://adoptium.net/en-GB/temurin/release-notes?version=jdk-17.0.19+10
 -->
 [temurin_openjdk17]: https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot
 [temurin_openjdk17_bugfixes]: https://www.oracle.com/java/technologies/javase/17-0-4-bugfixes.html
