@@ -374,7 +374,7 @@ if defined __GO_CMD (
     )
 )
 if not exist "%_GOLANG_HOME%\bin\go.exe" (
-    echo %_ERROR_LABEL% Go executable not found ^("%_GOLANG_HOME%"^) 1>&2
+    @rem echo %_ERROR_LABEL% Go executable not found ^("%_GOLANG_HOME%"^) 1>&2
     set _EXITCODE=1
     goto :eof
 )
@@ -610,6 +610,11 @@ where /q "%DAFNY_HOME%:dafny.exe"
 if %ERRORLEVEL%==0 (
     for /f "tokens=1,* delims=+" %%i in ('"%DAFNY_HOME%\dafny.exe" --version 2^>^&1') do set "__VERSIONS_LINE1=%__VERSIONS_LINE1% dafny %%i,"
     set __WHERE_ARGS=%__WHERE_ARGS% "%DAFNY_HOME%:dafny.exe"
+)
+where /q "dotnet.exe"
+if %ERRORLEVEL%==0 (
+    for /f "tokens=1,* delims=+" %%i in ('"dotnet.exe" --version 2^>^&1') do set "__VERSIONS_LINE1=%__VERSIONS_LINE1% dotnet %%i,"
+    set __WHERE_ARGS=%__WHERE_ARGS% "dotnet.exe"
 )
 where /q "%JAVA_HOME%\bin:javac.exe"
 if %ERRORLEVEL%==0 (

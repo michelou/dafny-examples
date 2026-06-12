@@ -15,7 +15,9 @@ This example has the following directory structure :
 <pre style="font-size:80%;">
 <b>&gt; <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tree" rel="external">tree</a> /f /a . | <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr" rel="external">findstr</a> /v /b [A-Z]</b>
 |   <a href="./Fibonacci/build.bat">build.bat</a>
+|   <a href="./Fibonacci/build.ps1">build.ps1</a>
 |   <a href="./Fibonacci/build.sh">build.sh</a>
+|   <a href="./Fibonacci/Makefile">Makefile/a>
 \---<b>src</b>
         <a href="./Fibonacci/src/Fib.dfy">Fib.dfy</a>
 </pre>
@@ -55,7 +57,7 @@ Command [`build.bat`](./Fibonacci/build.bat) with option `-target:java` compiles
 [build] Variables  : "CARGO_HOME=C:\Users\michelou\.cargo"
 [build] Variables  : "DAFNY_HOME=C:\opt\dafny"
 [build] Variables  : "GIT_HOME=C:\opt\Git"
-[build] Variables  : "JAVA_HOME=C:\opt\jdk-temurin-17.0.17_10"
+[build] Variables  : "JAVA_HOME=C:\opt\jdk-temurin-17.0.19_10"
 [build] Variables  : "MSVS_HOME=C:\Program Files\Microsoft Visual Studio\2022\Community"
 [build] rmdir /s /q "F:\examples\Fibonacci\target"
 [build] "%DAFNY_HOME%\dafny.exe" build --target java --output  "F:\examples\Fibonacci\target\Fib.jar"  "F:\examples\Fibonacci\src\Fib.dfy"
@@ -116,8 +118,9 @@ fib(10)=55
 > delay-import modules: &lt;none>
 > </pre>
 
-<!--================================================================-->
-## <span id="getting_started">`GettingStarted` Example</span>
+<!--=======================================================================-->
+
+## <span id="getting_started">`GettingStarted` Example</span> [**&#x25B4;**](#top)
 
 This example has the following directory structure :
 
@@ -125,7 +128,9 @@ This example has the following directory structure :
 <b>&gt; <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tree" rel="external">tree</a> /f /a . | <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr" rel="external">findstr</a> /v /b [A-Z]</b>
 |   <a href="./GettingStarted/00download.txt">00download.txt</a>
 |   <a href="./GettingStarted/build.bat">build.bat</a>
+|   <a href="./GettingStarted/build.ps1">build.ps1</a>
 |   <a href="./GettingStarted/build.sh">build.sh</a>
+|   <a href="./GettingStarted/Makefile">Makefile</a>
 \---<b>src</b>
         <a href="./GettingStarted/src/GettingStarted.dfy">GettingStarted.dfy</a>
 </pre>
@@ -144,6 +149,22 @@ GettingStarted: Abs(-3)=3
 
 <!--=======================================================================-->
 
+## <span id="dutch_flag">`DutchFlag` Example</span> [**&#x25B4;**](#top)
+
+This example has the following directory structure :
+
+<pre style="font-size:80%;">
+<b>&gt; <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tree" rel="external">tree</a> /f /a . | <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr" rel="external">findstr</a> /v /b [A-Z]</b>
+|   <a href="./DutchFlag/00download.txt">00download.txt</a>
+|   <a href="./DutchFlag/build.bat">build.bat</a>
+|   <a href="./DutchFlag/build.sh">build.sh</a>
+|   <a href="./DutchFlag/Makefile">Makefile</a>
+\---<b>src</b>
+        <a href="./DutchFlag/src/DutchFlag.dfy">DutchFlag.dfy</a>
+</pre>
+
+<!--=======================================================================-->
+
 ## <span id="footnotes">Footnotes</span> [**&#x25B4;**](#top)
 
 <span id="footnote_01">[1]</span> ***Missing* <code>goimports</code> *command*** [↩](#anchor_01)
@@ -151,22 +172,25 @@ GettingStarted: Abs(-3)=3
 <dl><dd>
 <pre style="font-size:80%;">
 <b>&gt; %GOROOT%\bin\<a href="https://pkg.go.dev/cmd/go" rel="external">go</a> install golang.org/x/tools/cmd/goimports@latest</b>
-go: downloading golang.org/x/tools v0.38.0
-go: downloading golang.org/x/mod v0.29.0
-go: downloading golang.org/x/sync v0.17.0
+go: downloading golang.org/x/tools v0.46.0
+go: downloading golang.org/x/telemetry v0.0.0-20260610154732-fb80ec83bdd9
+go: downloading golang.org/x/mod v0.37.0
+go: downloading golang.org/x/sync v0.21.0
+go: downloading golang.org/x/sys v0.46.0
 </pre>
 
 <pre style="font-size:80%;">
 <b>&gt; %GOROOT%\bin\go.exe version -m %GOBIN%\goimports.exe</b>
-%GOBIN%\goimports.exe: go1.25.3
+%GOBIN%\goimports.exe: go1.26.4
         path    golang.org/x/tools/cmd/goimports
-        mod     golang.org/x/tools      v0.38.0 h1:Hx2Xv8hI...ibYI/IQ=
-        dep     golang.org/x/mod        v0.29.0 h1:D4nJWe9z...59z1pH4=
-        dep     golang.org/x/sync       v0.17.0 h1:l60nONMj...k2oT9Ug=
-        dep     golang.org/x/sys        v0.37.0 h1:fdNQudmx...1goi9kQ=
+        mod     golang.org/x/tools      v0.46.0 h1:7jTu...7rk=
+        dep     golang.org/x/mod        v0.37.0 h1:vF1D...4JQ=
+        dep     golang.org/x/sync       v0.21.0 h1:HLII...CwM=
+        dep     golang.org/x/sys        v0.46.0 h1:noSf...hXw=
+        dep     golang.org/x/telemetry  v0.0.0-20260610...      h1:FjUu...ohQ=
         build   -buildmode=exe
         build   -compiler=gc
-        build   DefaultGODEBUG=asynctimerchan=1,gotypesalias=1,[...]
+        build   DefaultGODEBUG=cryptocustomrand=1,tlssecpmlkem=0,urlstrictcolons=0
         build   CGO_ENABLED=1
         build   CGO_CFLAGS=
         build   CGO_CPPFLAGS=

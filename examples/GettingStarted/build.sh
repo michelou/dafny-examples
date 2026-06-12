@@ -280,9 +280,9 @@ args "$@"
 
 case "$TARGET" in
     cs)     TARGET_EXT=.exe ;;
-    native) TARGET_EXT=.exe ;;
     go)     TARGET_EXT=.exe ;;
     java)   TARGET_EXT=.jar ;;
+    native) TARGET_EXT=.exe ;;
     rs)     TARGET_EXT=.exe ;;
     *)      TARGET_EXT=
 esac

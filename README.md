@@ -12,7 +12,7 @@
   </tr>
 </table>
 
-[Ada][ada_examples], [Akka][akka_examples], [C++][cpp_examples], [COBOL][cobol_examples], [Component Pascal][component_pascal_examples], [Dart][dart_examples], [Deno][deno_examples], [Docker][docker_examples], [Flix][flix_examples], [Go][golang_examples], [GraalVM][graalvm_examples], [Haskell][haskell_examples], [Kafka][kafka_examples], [Kotlin][kotlin_examples], [LLVM][llvm_examples], [Modula-2][m2_examples], [MySQL][mysql_examples], [Node.js][nodejs_examples], [Rust][rust_examples], [Scala&nbsp;3][scala3_examples], [Spark][spark_examples], [Spring][spring_examples], [Standard&nbsp;ML][sml_examples], [TruffleSqueak][trufflesqueak_examples], [WiX&nbsp;Toolset][wix_examples] and [Zig][zig_examples] are other topics we are continuously monitoring.
+[Ada][ada_examples], [Akka][akka_examples], [C++][cpp_examples], [COBOL][cobol_examples], [Component Pascal][component_pascal_examples], [Dart][dart_examples], [Deno][deno_examples], [Docker][docker_examples], [Flix][flix_examples], [Go][golang_examples], [GraalVM][graalvm_examples], [Haskell][haskell_examples], [Kafka][kafka_examples], [Kotlin][kotlin_examples], [LLVM][llvm_examples], [Modula-2][m2_examples], [MySQL][mysql_examples], [Node.js][nodejs_examples], [PowerShell][powershell_examples], [Rust][rust_examples], [Scala&nbsp;3][scala3_examples], [Spark][spark_examples], [Spring][spring_examples], [Standard&nbsp;ML][sml_examples], [TruffleSqueak][trufflesqueak_examples], [WiX&nbsp;Toolset][wix_examples] and [Zig][zig_examples] are other topics we are continuously monitoring.
 
 ## <span id="proj_deps">Project dependencies</span>
 
@@ -24,11 +24,11 @@ Optionally one may also install the following software <sup id="anchor_02">[2](#
 
 - [ConEmu 2023][conemu_downloads] ([*release notes*][conemu_relnotes])
 - [Dafny for Visual Studio Code 3.5][dafny_vscode] ([*release notes*][ide-vscode_relnotes])
-- [Go 1.6][golang_downloads] ([*release notes*][golang_relnotes])
+- [Go 1.26][golang_downloads] ([*release notes*][golang_relnotes])
 - [Python 3.11][python_downloads] ([*changelog*][python_changelog])
 - [Rust 1.96][rust_downloads] ([*release notes*][rust_relnotes])
 - [Temurin OpenJDK 17 LTS][temurin_openjdk17] ([*release notes*][temurin_openjdk17_relnotes], [*bug fixes*][temurin_openjdk17_bugfixes], [Java 17 API][oracle_openjdk17_api])
-- [Visual Studio Code 1.120][vscode_downloads] ([*release notes*][vscode_relnotes])
+- [Visual Studio Code 1.124][vscode_downloads] ([*release notes*][vscode_relnotes])
 
 > **&#9755;** ***Installation policy***<br/>
 > When possible we install software from a [Zip archive][zip_archive] rather than via a [Windows installer][windows_installer]. In our case we defined **`C:\opt\`** as the installation directory for optional software tools (*in reference to* the [`/opt/`][unix_opt] directory on Unix).
@@ -43,7 +43,6 @@ C:\opt\go\                            <i>(246 MB)</i>
 C:\opt\jdk-temurin-17.0.19_10\        <i>(302 MB)</i>
 C:\opt\Python-3.11.1\                 <i>( 77 MB)</i>
 C:\opt\VSCode\                        <i>(381 MB)</i>
-C:\Program Files\dotnet\sdk\6.0.428\  <i>(329 MB)</i>
 C:\Program Files\dotnet\sdk\9.0.307\  <i>(381 MB)</i> <sup id="anchor_04"><a href="#footnote_04">4</sup>
 <a href="https://en.wikipedia.org/wiki/Environment_variable#Default_values">%USERPROFILE%</a>\.cargo\                 <i>(100 MB)</i>
 <a href="https://en.wikipedia.org/wiki/Environment_variable#Default_values">%USERPROFILE%</a>\.rustup\                <i>(593 MB, installed toolchains and configuration options)</i>
@@ -86,7 +85,7 @@ We execute command [**`setenv`**](setenv.bat) once to setup our development envi
 <b>&gt; <a href="setenv.bat">setenv</a></b>
 Tool versions:
    cargo 1.96.0, rustc 1.96.0, dafny 4.11.0,
-   javac 17.0.19, code 1.120.0, go 1.26.3, goimports v0.38.0,
+   javac 17.0.19, code 1.124.2, go 1.26.4, goimports v0.38.0,
    csc 4.14.0, git 2.54.0, diff 3.12, bash 5.3.9(1)
 
 <b>&gt; <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/where_1" rel="external">where</a> git sh</b>
@@ -106,7 +105,7 @@ Command [**`setenv`**](./setenv.bat)`-verbose` also prints :
 <b>&gt; <a href="./setenv.bat">setenv</a> -verbose</b>
 Tool versions:
    cargo 1.96.0, rustc 1.96.0, dafny 4.11.0,
-   javac 17.0.19, code 1.120.0, go 1.26.3, goimports v0.38.0,
+   javac 17.0.19, code 1.124.2, go 1.26.4, goimports v0.38.0,
    csc 4.14.0, git 2.54.0, diff 3.12, bash 5.3.9(1)
 Tool paths:
    %USERPROFILE%\.cargo\bin\cargo.exe
@@ -205,13 +204,13 @@ In our case we downloaded the following installation files (<a href="#proj_deps"
 <dd>
 <pre style="font-size:80%;">
 <a href="https://github.com/dafny-lang/dafny/releases" rel="external">dafny-4.11.0-x64-windows-2019.zip</a>                  <i>( 60 MB)</i>
-<a href="https://dotnet.microsoft.com/en-us/download/dotnet/9.0" rel="external">dotnet-sdk-9.0.306-win-x64.exe</a>                     <i>(198 MB)</i>
-<a href="https://golang.org/dl/#stable" rel="external">go1.26.3.windows-amd64.zip</a>                         <i>( 70 MB)</i>
+<a href="https://dotnet.microsoft.com/en-us/download/dotnet/9.0" rel="external">dotnet-sdk-9.0.315-win-x64.exe</a>                     <i>(198 MB)</i>
+<a href="https://golang.org/dl/#stable" rel="external">go1.26.4.windows-amd64.zip</a>                         <i>( 70 MB)</i>
 <a href="https://adoptium.net/releases.html?variant=openjdk17&jvmVariant=hotspot">OpenJDK17U-jdk_x64_windows_hotspot_17.0.19_10.zip</a>  <i>(188 MB)</i>
 <a href="https://git-scm.com/download/win" rel="external">PortableGit-2.54.0-64-bit.7z.exe</a>                   <i>( 55 MB)</i>
 <a href="https://www.python.org/downloads/">python-3.11.1-amd64.exe</a>                            <i>( 26 MB)</i>
 <a href="https://www.rust-lang.org/tools/install">rust-init.exe</a>                                      <i>(  8 MB)</i>
-<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.120.0.zip</a>                       <i>(131 MB)</i>
+<a href="https://code.visualstudio.com/Download#" rel="external">VSCode-win32-x64-1.124.2.zip</a>                       <i>(131 MB)</i>
 </pre>
 </dd></dl>
 
@@ -288,6 +287,7 @@ The version pairing between .NET and [MSBuild] is listed in the Microsoft docume
 [msys2_downloads]: http://repo.msys2.org/distrib/x86_64/
 [mysql_examples]: https://github.com/michelou/mysql-examples#top
 [nodejs_examples]: https://github.com/michelou/nodejs-examples#top
+[powershell_examples]: https://github.com/michelou/powershell-examples#top
 [oracle_openjdk17_api]: https://docs.oracle.com/en/java/javase/17/docs/api/
 [python_changelog]: https://docs.python.org/release/3.11.0/whatsnew/changelog.html
 [python_downloads]: https://www.python.org/downloads/
